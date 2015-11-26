@@ -1,0 +1,59 @@
+﻿@model HK.Models.ContainerItem
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>ContainerItem</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Buyer.BuyerCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Buyer.BuyerCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Product.ProductCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Product.ProductCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Quantity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Quantity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.QuantityType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.QuantityType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cartons)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cartons)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ContainerItemID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

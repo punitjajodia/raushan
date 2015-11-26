@@ -1,0 +1,65 @@
+﻿@model HK.Models.ContainerItem
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>ContainerItem</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Buyer.BuyerCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Buyer.BuyerCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Product.ProductCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Product.ProductCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Quantity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Quantity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.QuantityType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.QuantityType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cartons)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cartons)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

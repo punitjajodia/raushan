@@ -1,0 +1,121 @@
+﻿@model HK.Models.TmpContainerItem
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>TmpContainerItem</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Container.ContainerNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Container.ContainerNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CartonNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CartonNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BuyerName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BuyerName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductCustomsName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProductCustomsName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductBuyerName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProductBuyerName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductUnit)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProductUnit)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Quantity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Quantity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cartons)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cartons)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BuyerCurrency)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BuyerCurrency)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BuyerUnitPrice)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BuyerUnitPrice)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomsCurrency)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomsCurrency)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomsUnitPrice)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomsUnitPrice)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

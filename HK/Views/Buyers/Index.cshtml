@@ -1,0 +1,40 @@
+﻿@model IEnumerable<HK.Models.Buyer>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Buyers</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.BuyerCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BuyerName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.BuyerCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BuyerName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.BuyerID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.BuyerID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.BuyerID })
+        </td>
+    </tr>
+}
+
+</table>

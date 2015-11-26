@@ -1,0 +1,88 @@
+﻿@model IEnumerable<HK.Models.Container>
+
+@{
+    ViewBag.Title = "List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>List</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Exporter.ExporterName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Importer.ImporterName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ContainerNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ShippedPer)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OnAbout)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.From)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AirwayBillNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LetterOfCreditNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DrawnUnder)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Exporter.ExporterName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Importer.ImporterName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ContainerNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ShippedPer)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OnAbout)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.From)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AirwayBillNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LetterOfCreditNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DrawnUnder)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ContainerID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ContainerID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ContainerID })
+        </td>
+    </tr>
+}
+
+</table>

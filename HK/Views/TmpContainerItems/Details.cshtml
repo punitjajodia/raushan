@@ -1,0 +1,115 @@
+﻿@model HK.Models.TmpContainerItem
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>TmpContainerItem</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Container.ContainerNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Container.ContainerNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CartonNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CartonNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BuyerName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BuyerName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductCustomsName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProductCustomsName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductBuyerName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProductBuyerName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductUnit)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProductUnit)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Quantity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Quantity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cartons)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cartons)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BuyerCurrency)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BuyerCurrency)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BuyerUnitPrice)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BuyerUnitPrice)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomsCurrency)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomsCurrency)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomsUnitPrice)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomsUnitPrice)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.TmpContainerItemID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

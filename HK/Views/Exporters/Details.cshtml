@@ -1,0 +1,42 @@
+﻿@model HK.Models.Exporter
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
+    <div>
+        <h4>Exporter</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.ExporterName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ExporterName)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ExporterAddress)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ExporterAddress)
+            </dd>
+    
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.ExporterID }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</body>
+</html>

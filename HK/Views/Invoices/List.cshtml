@@ -1,0 +1,49 @@
+﻿@model IEnumerable<HK.ViewModels.InvoiceItem>
+
+<table class="table" data-toggle="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Unit)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UnitPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Amount)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductCode)
+                </td>
+                <td>
+                 
+                   @String.Format("{0:0.##}", @Html.DisplayFor(modelItem => item.Quantity))
+                </td>
+                <td>
+                    <strong class="ShowEdit_Show">@item.ProductContainerPrice.QuantityType <i class="glyphicon glyphicon-pencil"></i></strong>
+                    @Html.EnumDropDownListFor(modelItem => item.ProductContainerPrice.QuantityType, htmlAttributes: new { @class = "ShowEdit_Edit", data_ProductID = item.ProductID, @name = "QuantityType", data_ModelName = "QuantityType", data_ProductContainerPriceID = item.ProductContainerPrice.ProductContainerPriceID })
+                </td>
+                <td>
+                    @Html.EditorFor(modelItem => item.ProductContainerPrice.Price, new { htmlAttributes = new { @class = "inline_textbox", data_ProductID = item.ProductID, data_ModelName = "Price", data_ProductContainerPriceID = item.ProductContainerPrice.ProductContainerPriceID } })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Amount)
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+

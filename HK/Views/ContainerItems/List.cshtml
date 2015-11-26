@@ -1,0 +1,60 @@
+﻿@model IEnumerable<HK.Models.ContainerItem>
+
+<table class="table" data-toggle="table" data-striped="true" data-sort-name="productcode">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CartonNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Buyer.BuyerCode)
+            </th>
+            <th data-field="productcode" data-sortable="true">
+                @Html.DisplayNameFor(model => model.Product.ProductCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.QuantityType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cartons)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CartonNumber)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Buyer.BuyerCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Product.ProductCode)
+                </td>
+                <td>
+                    @String.Format("{0:0.##}", @Html.DisplayFor(modelItem => item.Quantity))
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.QuantityType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cartons)
+                </td>
+                <td>
+                    @*   @Html.ActionLink("Edit", "Edit", new { id = item.ContainerItemID }) |*@
+                    @*   @Html.ActionLink("Details", "Details", new { id = item.ContainerItemID }) |*@
+                    @Ajax.ActionLink("Delete", "Delete", "ContainerItems", new { id = item.ContainerItemID }, new AjaxOptions { HttpMethod = "POST", OnSuccess = "RefreshData", Confirm = "Are you sure you want to delete?" })
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>

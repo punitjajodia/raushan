@@ -1,0 +1,148 @@
+﻿@*@model IEnumerable<IGrouping<HK.Models.Buyer, HK.ViewModels.BuyerInvoiceItem>>*@
+@model IEnumerable<HK.ViewModels.BuyerInvoiceItem>
+
+@*<table class="table">
+   
+
+    
+        @foreach (var item in Model)
+        { 
+                for(var i=0; i< item.Count(); i++)
+                {
+                    <tr>
+                    @if(i == 0)
+                    {
+                        <td rowspan="@item.Count()">@item.Key.BuyerCode</td>
+                    }
+                        <td>
+                            @item.ElementAt(i).ProductContainerBuyerPrice.Product.ProductCode
+                        </td>
+                        <td>
+                            @item.ElementAt(i)..ProductContainerBuyerPrice.Buyer.BuyerCode
+                        </td>
+                        <td>
+                            @item.ElementAt(i).Quantity
+                        </td>
+                        <td>
+
+                        </td>
+                    </tr>
+                }
+        }
+        
+</table>*@
+
+    <table class="table">
+            <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ProductContainerBuyerPrice.Buyer.BuyerCode)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ProductContainerBuyerPrice.Product.ProductCode)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Quantity)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ProductContainerBuyerPrice.Unit)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ProductContainerBuyerPrice.Price)
+                    </th>
+
+                    <th>
+                        @Html.DisplayNameFor(model => model.Cartons)
+                    </th>
+            </tr>
+
+        @{
+           var grouped = Model.GroupBy(model => model.ProductContainerBuyerPrice.Buyer.BuyerCode);
+        }
+        @foreach (var item in grouped)
+        {
+            for (var i = 0; i < item.Count(); i++)
+            {
+                <tr>
+                    @if (i == 0)
+                    {
+                        <td rowspan="@item.Count()">@item.ElementAt(0).ProductContainerBuyerPrice.Buyer.BuyerCode</td>
+                    }
+                    <td>
+                        @item.ElementAt(i).ProductContainerBuyerPrice.Product.ProductCode
+                    </td>
+                    <td>
+                        @String.Format("{0:0.##}", @item.ElementAt(i).Quantity)
+                    </td>
+                    <td>
+                        @using (Ajax.BeginForm("Edit", null, new AjaxOptions { OnComplete = "RefreshData" }, new { @class = "buyerInvoiceForm" }))
+                        {
+                            @Html.HiddenFor(modelItem => item.ElementAt(i).ProductContainerBuyerPrice.ProductContainerBuyerPriceID, new { Name = "ProductContainerBuyerPriceID" })
+                            @Html.HiddenFor(modelItem => item.ElementAt(i).ProductContainerBuyerPrice.BuyerID, new { Name = "BuyerID" })
+                            @Html.HiddenFor(modelItem => item.ElementAt(i).ProductContainerBuyerPrice.ProductID, new { Name = "ProductID" })
+                            @Html.HiddenFor(modelItem => item.ElementAt(i).ProductContainerBuyerPrice.Price, new { Name = "Price" })
+    <strong class="ShowEdit_Show">@item.ElementAt(i).ProductContainerBuyerPrice.Unit <i class="glyphicon glyphicon-pencil"></i></strong>
+                            @Html.EnumDropDownListFor(modelItem => item.ElementAt(i).ProductContainerBuyerPrice.Unit, new { Name = "Unit", @class="ShowEdit_Edit" })
+                        }
+                    </td>
+                    <td>
+                        @using (Ajax.BeginForm("Edit", null, new AjaxOptions { OnComplete = "RefreshData" }, new { @class = "buyerInvoiceForm" }))
+                        {
+                            @Html.HiddenFor(modelItem => item.ElementAt(i).ProductContainerBuyerPrice.ProductContainerBuyerPriceID, new { Name = "ProductContainerBuyerPriceID" })
+                            @Html.HiddenFor(modelItem => item.ElementAt(i).ProductContainerBuyerPrice.BuyerID, new { Name = "BuyerID" })
+                            @Html.HiddenFor(modelItem => item.ElementAt(i).ProductContainerBuyerPrice.ProductID, new { Name = "ProductID" })
+                            @Html.HiddenFor(modelItem => item.ElementAt(i).ProductContainerBuyerPrice.Unit, new { Name = "Unit" })
+                            @Html.TextBoxFor(modelItem => item.ElementAt(i).ProductContainerBuyerPrice.Price, new { id = "price", Name = "Price", @class="inline_textbox" })
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ElementAt(i).Cartons)
+                    </td>
+                </tr>
+            }
+        }
+
+        @*@foreach (var item in Model) {
+
+                <tr class="buyerInvoiceItem">
+                        
+         
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProductContainerBuyerPrice.Buyer.BuyerCode)
+                        </td>
+                        
+                       
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProductContainerBuyerPrice.Product.ProductCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Quantity)
+                        </td>
+                    <td>
+                        @using(Ajax.BeginForm("Edit", null, new AjaxOptions { OnComplete = "RefreshData" }, new { @class = "buyerInvoiceForm" }))
+                        {
+                            @Html.HiddenFor(modelItem => item.ProductContainerBuyerPrice.ProductContainerBuyerPriceID, new { Name = "ProductContainerBuyerPriceID" })
+                            @Html.HiddenFor(modelItem => item.ProductContainerBuyerPrice.BuyerID, new { Name = "BuyerID" })
+                            @Html.HiddenFor(modelItem => item.ProductContainerBuyerPrice.ProductID, new { Name = "ProductID" })
+                            @Html.HiddenFor(modelItem => item.ProductContainerBuyerPrice.Price, new { Name = "Price"})
+                            @Html.EnumDropDownListFor(modelItem => item.ProductContainerBuyerPrice.Unit, new { Name = "Unit" })
+                        }
+                    </td>
+                        <td>
+                            @using(Ajax.BeginForm("Edit", null, new AjaxOptions { OnComplete = "RefreshData" }, new { @class = "buyerInvoiceForm" }))
+                            {
+                                @Html.HiddenFor(modelItem => item.ProductContainerBuyerPrice.ProductContainerBuyerPriceID, new { Name = "ProductContainerBuyerPriceID" })
+                                @Html.HiddenFor(modelItem => item.ProductContainerBuyerPrice.BuyerID, new { Name = "BuyerID" })
+                                @Html.HiddenFor(modelItem => item.ProductContainerBuyerPrice.ProductID, new { Name = "ProductID" })
+                                @Html.HiddenFor(modelItem => item.ProductContainerBuyerPrice.Unit, new { Name = "Unit" })
+                                @Html.TextBoxFor(modelItem => item.ProductContainerBuyerPrice.Price, new { id = "price", Name = "Price" })
+
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Cartons)
+                        </td>
+                </tr>
+
+        }*@
+
+        </table>

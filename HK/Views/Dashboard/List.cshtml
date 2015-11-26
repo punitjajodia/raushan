@@ -1,0 +1,26 @@
+﻿@model HK.ViewModels.PackingListVM
+
+<div class="row" id="PackingListWrapper">
+
+        <h2>Packing List</h2>
+        <a href='@Url.Action("ExportPackingList", "Excel")'>Packing List Excel</a>
+        <div id="ContainerItems">
+            @Html.Partial("~/Views/ContainerItems/List.cshtml", Model.Container.ContainerItems)
+        </div>
+
+</div>
+<div class="row">
+    <div class="col-md-6" id="CustomsInvoiceWrapper">
+            <h2>Customs Invoice</h2>
+            <a href='@Url.Action("ExportInvoice", "Excel")'>Invoice Excel</a>
+            <div id="Invoices">
+                @Html.Partial("~/Views/Invoices/List.cshtml", Model.InvoiceItems)
+            </div>
+    </div>
+
+    <div class="col-md-6">
+            <h2>Buyer Invoice</h2>
+            @Html.Action("List", "BuyerInvoices")
+    </div>
+</div>
+

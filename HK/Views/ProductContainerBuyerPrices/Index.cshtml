@@ -1,0 +1,65 @@
+﻿@model IEnumerable<HK.Models.ProductContainerBuyerPrice>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Buyer.BuyerCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Container.ContainerNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Product.ProductCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Unit)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th></th>
+        </tr>
+    
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Buyer.BuyerCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Container.ContainerNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.ProductCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Unit)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.ProductContainerBuyerPriceID }) |
+                @Html.ActionLink("Details", "Details", new { id=item.ProductContainerBuyerPriceID }) |
+                @Html.ActionLink("Delete", "Delete", new { id=item.ProductContainerBuyerPriceID })
+            </td>
+        </tr>
+    }
+    
+    </table>
+</body>
+</html>

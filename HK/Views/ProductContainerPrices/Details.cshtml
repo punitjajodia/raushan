@@ -1,0 +1,58 @@
+﻿@model HK.Models.ProductContainerPrice
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
+    <div>
+        <h4>ProductContainerPrice</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Container.ContainerNumber)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Container.ContainerNumber)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Product.ProductCode)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Product.ProductCode)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.Price)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.Price)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.QuantityType)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.QuantityType)
+            </dd>
+    
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.ProductContainerPriceID }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</body>
+</html>

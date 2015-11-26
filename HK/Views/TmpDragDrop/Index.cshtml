@@ -1,0 +1,79 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div id="multi">
+
+  
+  
+        <div class="tile__list">
+            <div>Girls Vest</div>
+        </div>
+    
+        <div class="tile__list">
+            <div>Girls Lower</div>
+        </div>
+
+        
+        <div class="tile__list">
+            <div>Girls Upper</div>
+        </div>
+
+        <div class="tile__list">
+            <div>Girls BRA</div>
+        </div>
+
+        <div class="tile__list">
+            <div>Girls Inner</div>
+        </div>
+
+        <div class="tile__list">
+            <div>Girls Trouser</div>
+        </div>
+
+    
+
+
+
+</div>
+
+<style>
+    .tile__list {
+        border: 1px solid black;
+    }
+
+    .tile__list > div {
+        padding:10px;
+        margin:1px;
+        background: #EFEFEF;
+        cursor:move;
+    }
+</style>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/Sortable/1.4.2/Sortable.min.js"></script>
+<script>
+    var byId = function (id) { return document.getElementById(id); };
+
+    //// Multi groups
+    //Sortable.create(byId("multi"), {
+    //    animation: 150,
+    //    draggable: ".tile",
+    //    handle: ".tile__name"
+    //});
+
+    [].forEach.call(byId("multi").getElementsByClassName("tile__list"), function (el) {
+        Sortable.create(el, {
+            group: "photo",
+            animation: 150,
+            onAdd: function (evt) { console.log('onAdd.foo:', [evt.item.innerHTML, evt.from.innerHTML]); },
+          //  onUpdate: function (evt) { console.log('onUpdate.foo:', [evt.item.innerHTML, evt.from.innerHTML]); },
+          //  onRemove: function (evt) { console.log('onRemove.foo:', [evt.item, evt.from]); },
+          //  onStart: function (evt) { console.log('onStart.foo:', [evt.item, evt.from]); },
+          //  onSort: function (evt) { console.log('onStart.foo:', [evt.item, evt.from]); },
+          //  onEnd: function (evt) { console.log('onEnd.foo:', [evt.item, evt.from]); }
+        });
+    });
+</script>

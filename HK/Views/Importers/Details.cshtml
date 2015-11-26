@@ -1,0 +1,50 @@
+﻿@model HK.Models.Importer
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Details</title>
+</head>
+<body>
+    <div>
+        <h4>Importer</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.ImporterName)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ImporterName)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.ImporterAddress)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.ImporterAddress)
+            </dd>
+    
+            <dt>
+                @Html.DisplayNameFor(model => model.TaxCertificateNumber)
+            </dt>
+    
+            <dd>
+                @Html.DisplayFor(model => model.TaxCertificateNumber)
+            </dd>
+    
+        </dl>
+    </div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.ImporterID }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</body>
+</html>

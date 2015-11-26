@@ -1,0 +1,26 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.ActionLink("Export", "ExportContainer", "TmpExportToExcel", null, new { @class = "menu-item" })
+@Html.Action("Index", "TmpContainerItems")
+
+<br/>
+
+@Html.Action("Upload", "TmpImportFromExcel")
+
+@Html.ActionLink("Buyer Packing List", "BuyerNamePackingList", "TmpExportToExcel", null, new { @class = "menu-item" })
+
+@Html.ActionLink("Customs Packing List", "CustomsNamePackingList", "TmpExportToExcel", null, new { @class = "menu-item" })
+
+@Html.ActionLink("Customs Invoice", "CustomsNameInvoice", "TmpExportToExcel", null, new { @class = "menu-item" })
+
+
+<style>
+    .menu-item {
+        padding:10px;
+        margin-right:10px;
+        background: #EFEFEF;
+      
+    }
+</style>
