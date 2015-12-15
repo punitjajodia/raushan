@@ -1,0 +1,12 @@
+﻿@model HK.Models.Container
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<div id="EditContainerForm">
+    @using (Ajax.BeginForm("Edit", new AjaxOptions { OnSuccess = "RefreshData", UpdateTargetId = "CreateEditContainer" }))
+    {
+        @Html.Partial("~/Views/TmpContainers/Fields.cshtml")
+    }
+</div>

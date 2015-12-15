@@ -62,7 +62,7 @@ function RefreshContainerForm() {
             params[this.name] = $(this).val();
         })
 
-        $.post('/Containers/Edit', params, function (data) {
+        $.post('/TmpContainers/Edit', params, function (data) {
             $("#CreateEditContainer").html(data);
             ReloadUIComponents();
             focusOnNextElement();

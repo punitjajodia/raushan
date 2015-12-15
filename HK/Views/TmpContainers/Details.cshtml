@@ -1,0 +1,91 @@
+﻿@model HK.Models.Container
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Container</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ContainerNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ContainerNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ShippedPer)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ShippedPer)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OnAbout)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OnAbout)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.From)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.From)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AirwayBillNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AirwayBillNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LetterOfCreditNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LetterOfCreditNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DrawnUnder)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DrawnUnder)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Importer)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Importer)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ContainerID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

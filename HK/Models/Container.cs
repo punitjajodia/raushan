@@ -33,9 +33,31 @@ namespace HK.Models
         [DisplayName("Drawn Under")]
         public string DrawnUnder { get; set; }
 
-        //[DataType(DataType.MultilineText)]
-        //[Required]
-        //public string Importer { get; set;}
+        [DataType(DataType.MultilineText)]
+        [DisplayName("Costs Included")]
+        public string CostsIncluded { get; set; } 
+
+        [DataType(DataType.MultilineText)]
+        [DisplayName("Harmonic Codes")]
+        public string HarmonicCodes { get; set; }
+
+        [DisplayName("Total Gross Weight")]
+        public string TotalGrossWeight { get; set; }
+
+        [DisplayName("Total CTN")]
+        public string TotalCartons { get; set; }
+
+        [DisplayName("Country Of Origin")]
+        public string CountryOfOrigin { get; set; }
+
+        [DisplayName("Beneficiary Bank")]
+        public string BeneficiaryBank { get; set; }
+
+        [DisplayName("Beneficiary SWIFT")]
+        public string BeneficiarySwift { get; set; }
+
+        [DisplayName("Beneficiary USD Account No.")]
+        public string BeneficiaryUsdAccount { get; set; }
 
         public int ImporterID { get; set; }
         public virtual Importer Importer { get; set; }

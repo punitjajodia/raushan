@@ -10,6 +10,7 @@ namespace HK.Models
         PCS,
         DOZ,
         PRS,
-        MTR
+        MTR,
+        SET
     }
 }

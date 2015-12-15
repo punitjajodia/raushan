@@ -107,3 +107,23 @@ label {
    left:50%;
    display: none;
 }
+
+.space10 {
+    margin-top:10px;
+}
+
+.space20{
+    margin-top: 20px;
+}
+
+.space40 {
+    margin-top: 40px;
+}
+
+.space60 {
+    margin-top: 60px;
+}
+
+.space80 {
+    margin-top: 80px;
+}

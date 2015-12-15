@@ -11,14 +11,17 @@ using HK.Models;
 
 namespace HK.Controllers
 {
-    public class TmpContainerItemsController : Controller
+    public class TmpContainerItemsController : BaseController
     {
         private ImportManagerContext db = new ImportManagerContext();
 
         // GET: TmpContainerItems
         public PartialViewResult Index()
         {
-            var tmpContainerItems = db.TmpContainerItems.Include(t => t.Container);
+            var tmpContainerItems = db.TmpContainerItems
+                .Where(t => t.ContainerID == CurrentContainerID)
+                .Include(t => t.Container);
+
             return PartialView(tmpContainerItems.ToList());
         }
 

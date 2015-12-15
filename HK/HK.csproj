@@ -33,6 +33,10 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PublishDatabaseSettings>
+      <Objects>
+      </Objects>
+    </PublishDatabaseSettings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -49,6 +53,9 @@
     <Reference Include="DocumentFormat.OpenXml, Version=2.5.5631.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\DocumentFormat.OpenXml.2.5\lib\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="Humanizer">
+      <HintPath>..\packages\Humanizer.1.37.7\lib\portable-win+net40+sl50+wp8+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Humanizer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
@@ -174,6 +181,7 @@
     <Compile Include="Controllers\BuyerInvoicesController.cs" />
     <Compile Include="Controllers\BuyersController.cs" />
     <Compile Include="Controllers\ContainerItemsController.cs" />
+    <Compile Include="Controllers\TmpContainersController.cs" />
     <Compile Include="Controllers\ContainersController.cs" />
     <Compile Include="Controllers\TmpContainerItemsController.cs" />
     <Compile Include="Controllers\TmpDashboardController.cs" />
@@ -195,6 +203,15 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201511260731104_InitialCreate.cs" />
+    <Compile Include="Migrations\201511260731104_InitialCreate.Designer.cs">
+      <DependentUpon>201511260731104_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201512010818062_AddExtraColumnsToContainer.cs" />
+    <Compile Include="Migrations\201512010818062_AddExtraColumnsToContainer.Designer.cs">
+      <DependentUpon>201512010818062_AddExtraColumnsToContainer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Buyer.cs" />
     <Compile Include="Models\Container.cs" />
@@ -696,6 +713,7 @@
     <Content Include="Scripts\bootstrap-table-1.8.1\src\locale\bootstrap-table-en-US.js.template" />
     <Content Include="Scripts\bootstrap-table-1.8.1\src\locale\README.md" />
     <Content Include="Scripts\bootstrap-table-1.8.1\_config.yml" />
+    <None Include="Properties\PublishProfiles\Punit Local.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\chosen_v1.4.2\chosen-sprite%402x.png" />
     <Content Include="Scripts\chosen_v1.4.2\chosen-sprite.png" />
@@ -760,8 +778,17 @@
     <Content Include="Views\TmpContainerItems\Details.cshtml" />
     <Content Include="Views\TmpContainerItems\Edit.cshtml" />
     <Content Include="Views\TmpContainerItems\Index.cshtml" />
+    <Content Include="Views\TmpContainers\Create.cshtml" />
+    <Content Include="Views\TmpContainers\Delete.cshtml" />
+    <Content Include="Views\TmpContainers\Details.cshtml" />
+    <Content Include="Views\TmpContainers\Edit.cshtml" />
+    <Content Include="Views\TmpContainers\Fields.cshtml" />
+    <Content Include="Views\TmpContainers\Index.cshtml" />
+    <Content Include="Views\TmpContainers\List.cshtml" />
     <None Include="Views\TmpDragDrop\Index.cshtml" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -861,6 +888,14 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201511260731104_InitialCreate.resx">
+      <DependentUpon>201511260731104_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201512010818062_AddExtraColumnsToContainer.resx">
+      <DependentUpon>201512010818062_AddExtraColumnsToContainer.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

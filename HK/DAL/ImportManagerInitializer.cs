@@ -7,7 +7,7 @@ using System.Web;
 
 namespace HK.DAL
 {
-    public class ImportManagerInitializer : DropCreateDatabaseAlways<ImportManagerContext>
+    public class ImportManagerInitializer : DropCreateDatabaseIfModelChanges<ImportManagerContext>
     {
         protected override void Seed(ImportManagerContext context)
         {
