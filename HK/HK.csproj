@@ -212,6 +212,10 @@
     <Compile Include="Migrations\201512010818062_AddExtraColumnsToContainer.Designer.cs">
       <DependentUpon>201512010818062_AddExtraColumnsToContainer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201601171032482_PartyName.cs" />
+    <Compile Include="Migrations\201601171032482_PartyName.Designer.cs">
+      <DependentUpon>201601171032482_PartyName.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Buyer.cs" />
@@ -793,6 +797,7 @@
     <Content Include="Views\TmpContainers\Filters.cshtml" />
     <Content Include="Views\TmpBuyerBill\Index.cshtml" />
     <Content Include="Views\TmpBuyerBill\Export.cshtml" />
+    <Content Include="Views\TmpBuyerBill\SelectParty.cshtml" />
     <None Include="Views\TmpDragDrop\Index.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -903,6 +908,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201512010818062_AddExtraColumnsToContainer.resx">
       <DependentUpon>201512010818062_AddExtraColumnsToContainer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601171032482_PartyName.resx">
+      <DependentUpon>201601171032482_PartyName.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

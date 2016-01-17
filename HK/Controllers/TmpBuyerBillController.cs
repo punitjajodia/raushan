@@ -23,6 +23,67 @@ namespace HK.Controllers
             return View(buyers);
         }
 
+        public ActionResult SelectParty()
+        {
+            var parties = db.TmpContainerItems
+                .Where(t => t.ContainerID == CurrentContainerID)
+                .Select(t => t.PartyName)
+                .Distinct()
+                .ToList();
+
+            return View(parties);
+
+        }
+
+        public void Create()
+        {
+
+            var items = String.IsNullOrEmpty(Request.QueryString["party"]) ? new List<String>() : Request.QueryString["party"].Split(',').ToList();
+
+            var containerItems = db.TmpContainerItems.Where(t => t.ContainerID == CurrentContainerID).ToList();
+
+            var exportContainerItems = containerItems
+                .Where(c => items.Contains(c.PartyName))
+                .Select(c => new 
+                {
+                    Party = c.PartyName,
+                    Product = c.ProductBuyerName,
+                    Rate = c.BuyerUnitPrice,
+                    Quantity = c.Quantity,
+                    Unit = c.ProductUnit,
+                    Total = c.BuyerUnitPrice * c.Quantity
+                })
+                .ToList();
+
+
+            XLWorkbook wb = new XLWorkbook();
+            var ws = wb.Worksheets.Add("Bill");
+
+            var table = ws.Cell("A2").InsertTable(exportContainerItems);
+
+            //table.ShowTotalsRow = true;
+            //table.Field(4).TotalsRowFunction = XLTotalsRowFunction.Sum;
+            ////// Just for fun let's add the text "Sum Of Income" to the totals row
+            //table.Field(3).TotalsRowLabel = "Total Cartons";
+
+            ws.Columns().AdjustToContents();
+
+            string filename = "Bill";
+
+            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            Response.AddHeader("content-disposition", "attachment;filename=\"" + filename + ".xlsx\"");
+
+            // Flush the workbook to the Response.OutputStream
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                wb.SaveAs(memoryStream);
+                memoryStream.WriteTo(Response.OutputStream);
+                memoryStream.Close();
+            }
+
+            Response.End();
+        }
+
         public void Export()
         {
 

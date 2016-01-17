@@ -186,6 +186,7 @@ namespace HK.Controllers
                                     .Select(a => new
                                     {
                                        a.BuyerName,
+                                       a.PartyName,
                                        a.CartonNumber,
                                        a.ProductBuyerName,
                                        a.Quantity,

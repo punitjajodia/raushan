@@ -7,7 +7,8 @@ namespace HK.ViewModels
 {
     public class BuyerBillItem
     {
-         public String Marka {get; set;}
+         public String Party {get; set;}
+         public String Marka { get; set; }
          public String Product {get; set;}
          public decimal Rate {get; set;}
          public decimal Quantity {get; set;}

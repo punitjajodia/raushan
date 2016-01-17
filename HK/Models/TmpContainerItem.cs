@@ -13,6 +13,9 @@ namespace HK.Models
         public string CartonNumber { get; set; }
         
         public string BuyerName { get; set; }
+
+        public string PartyName { get; set; }
+
         public string ProductCustomsName { get; set; }
         public string ProductBuyerName { get; set; }
         public ProductUnit ProductUnit { get; set; }
@@ -26,7 +29,6 @@ namespace HK.Models
         public decimal BuyerUnitPrice { get; set; }	
         public string CustomsCurrency { get; set; }	
         public decimal CustomsUnitPrice { get; set;}
-
 
         public TmpContainerItem()
         {

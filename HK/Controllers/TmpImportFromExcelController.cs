@@ -126,6 +126,7 @@ namespace HK.Controllers
                 .Select(packingList => new {
                     CartonNumber = packingList.Field("CartonNumber").GetString(),
                     BuyerName = packingList.Field("BuyerName").GetString(),
+                    PartyName = packingList.Field("PartyName").GetString(),
                     ProductCustomsName = packingList.Field("ProductCustomsName").GetString(),
                     ProductBuyerName = packingList.Field("ProductBuyerName").GetString(),
                     ProductUnit = packingList.Field("ProductUnit").GetString(),
@@ -145,7 +146,7 @@ namespace HK.Controllers
                 containerItem.ContainerID = CurrentContainerID;
                 containerItem.CartonNumber = item.CartonNumber;
                 containerItem.BuyerName = item.BuyerName;
-              
+                containerItem.PartyName = item.PartyName;
                 containerItem.ProductCustomsName = item.ProductCustomsName;
                 containerItem.ProductBuyerName = item.ProductBuyerName;
                 containerItem.ProductUnit = (ProductUnit)Enum.Parse(typeof(ProductUnit), item.ProductUnit.TrimEnd('.'));
