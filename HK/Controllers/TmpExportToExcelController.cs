@@ -186,6 +186,7 @@ namespace HK.Controllers
                                     .Select(a => new
                                     {
                                        a.BuyerName,
+                                       a.PartyName,
                                        a.CartonNumber,
                                        a.ProductBuyerName,
                                        a.Quantity,
@@ -254,6 +255,7 @@ namespace HK.Controllers
                                     .Select(a => new
                                     {
                                         a.BuyerName,
+                                        a.PartyName,
                                         a.CartonNumber,
                                         a.ProductBuyerName,
                                         a.Quantity,
@@ -300,6 +302,7 @@ namespace HK.Controllers
                                     .Select(a => new
                                     {
                                         a.BuyerName,
+                        
                                         a.CartonNumber,
                                         a.ProductCustomsName,
                                         a.Quantity,
@@ -583,5 +586,37 @@ namespace HK.Controllers
             return RedirectToAction("Index");
         }
 
+
+        public void BuyerBill(List<BuyerBillItem> buyerBillItems)
+        {
+            var container = db.Containers.Find(CurrentContainerID);
+
+            XLWorkbook wb = new XLWorkbook();
+            var ws = wb.Worksheets.Add("Bill");
+
+            var table = ws.Cell("A2").InsertTable(buyerBillItems);
+
+            //table.ShowTotalsRow = true;
+            //table.Field(4).TotalsRowFunction = XLTotalsRowFunction.Sum;
+            ////// Just for fun let's add the text "Sum Of Income" to the totals row
+            //table.Field(3).TotalsRowLabel = "Total Cartons";
+
+            ws.Columns().AdjustToContents();
+
+            string filename = "Bill";
+
+            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            Response.AddHeader("content-disposition", "attachment;filename=\"" + filename + ".xlsx\"");
+
+            // Flush the workbook to the Response.OutputStream
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                wb.SaveAs(memoryStream);
+                memoryStream.WriteTo(Response.OutputStream);
+                memoryStream.Close();
+            }
+
+            Response.End();
+        }
     }
 }

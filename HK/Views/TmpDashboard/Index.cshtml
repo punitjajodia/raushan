@@ -9,8 +9,10 @@
     @*  @Html.Partial("~/Views/Containers/Edit.cshtml", Model.Container)*@
 </div>
 
-<div class="space40" />
 
+
+<div class="space40" />
+    @Html.ActionLink("Import Template", "PackingListImportTemplateExcel", "TmpImportFromExcel", null, new { @class = "menu-item" })
     @Html.ActionLink("Export", "ExportContainer", "TmpExportToExcel", null, new { @class = "menu-item" })
     @Html.ActionLink("Buyer Packing List", "BuyerNamePackingList", "TmpExportToExcel", null, new { @class = "menu-item" })
 

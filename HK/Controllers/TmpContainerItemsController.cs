@@ -52,7 +52,7 @@ namespace HK.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "TmpContainerItemID,ContainerID,CartonNumber,BuyerName,ProductCustomsName,ProductBuyerName,ProductUnit,Quantity,Cartons,BuyerCurrency,BuyerUnitPrice,CustomsCurrency,CustomsUnitPrice")] TmpContainerItem tmpContainerItem)
+        public ActionResult Create([Bind(Include = "TmpContainerItemID,ContainerID,CartonNumber,BuyerName, PartyName, ProductCustomsName,ProductBuyerName,ProductUnit,Quantity,Cartons,BuyerCurrency,BuyerUnitPrice,CustomsCurrency,CustomsUnitPrice")] TmpContainerItem tmpContainerItem)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace HK.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "TmpContainerItemID,ContainerID,CartonNumber,BuyerName,ProductCustomsName,ProductBuyerName,ProductUnit,Quantity,Cartons,BuyerCurrency,BuyerUnitPrice,CustomsCurrency,CustomsUnitPrice")] TmpContainerItem tmpContainerItem)
+        public ActionResult Edit([Bind(Include = "TmpContainerItemID,ContainerID,CartonNumber,BuyerName, PartyName, ProductCustomsName,ProductBuyerName,ProductUnit,Quantity,Cartons,BuyerCurrency,BuyerUnitPrice,CustomsCurrency,CustomsUnitPrice")] TmpContainerItem tmpContainerItem)
         {
             if (ModelState.IsValid)
             {

@@ -49,6 +49,10 @@ label {
     height: 1.8em !important;
 }
 
+.filter-panel {
+    padding: 10px;
+    background: #F1F1F1;
+}
 
 .inline_textbox {
     width: 80px;

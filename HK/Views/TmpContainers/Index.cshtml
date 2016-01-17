@@ -7,6 +7,8 @@
 
 <h2>Containers</h2>
 
+@Html.Action("Filters", "TmpContainers")
+
 <table class="table">
     <thead>
         <tr>
@@ -35,8 +37,12 @@
                 @Html.DisplayNameFor(model => model.DrawnUnder)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Exporter)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Importer)
             </th>
+
             <th></th>
         </tr>
     </thead>
@@ -68,6 +74,9 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.DrawnUnder)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Exporter.ExporterName)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Importer.ImporterName)

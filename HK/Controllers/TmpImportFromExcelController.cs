@@ -20,7 +20,7 @@ namespace HK.Controllers
 
         public FilePathResult PackingListImportTemplateExcel()
         {
-            return File("~/Content/ExcelTemplates/ImportPackingList.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            return File("~/Content/ExcelTemplates/import-template.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         }
 
         public void DeleteAllContainerItems()
@@ -125,7 +125,8 @@ namespace HK.Controllers
             var dataObj = dataTable.DataRange.Rows()
                 .Select(packingList => new {
                     CartonNumber = packingList.Field("CartonNumber").GetString(),
-                    BuyerName = packingList.Field("BuyerName").GetString(), 
+                    BuyerName = packingList.Field("BuyerName").GetString(),
+                    PartyName = packingList.Field("PartyName").GetString(),
                     ProductCustomsName = packingList.Field("ProductCustomsName").GetString(),
                     ProductBuyerName = packingList.Field("ProductBuyerName").GetString(),
                     ProductUnit = packingList.Field("ProductUnit").GetString(),
@@ -144,7 +145,8 @@ namespace HK.Controllers
                 var containerItem = new TmpContainerItem();
                 containerItem.ContainerID = CurrentContainerID;
                 containerItem.CartonNumber = item.CartonNumber;
-                containerItem.BuyerName = item.BuyerName; 
+                containerItem.BuyerName = item.BuyerName;
+                containerItem.PartyName = item.PartyName;
                 containerItem.ProductCustomsName = item.ProductCustomsName;
                 containerItem.ProductBuyerName = item.ProductBuyerName;
                 containerItem.ProductUnit = (ProductUnit)Enum.Parse(typeof(ProductUnit), item.ProductUnit.TrimEnd('.'));

@@ -1,0 +1,43 @@
+﻿
+@model HK.ViewModels.ContainerFilters
+
+@{
+    ViewBag.Title = "List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="filter-panel">
+    @using(@Html.BeginForm("Index", "TmpContainers", FormMethod.Get)) 
+    { 
+        <h4>Exporters</h4>
+        <div class="row">
+            @foreach (var item in Model.Exporters)
+            {
+                <div class="col-md-3">
+                    @{
+                        bool selected = Model.SelectedExporterIDs.Contains(item.ExporterID) ? true : false;
+                    }
+                    <input type="checkbox" name="exporter" value="@item.ExporterID" checked="@selected" />
+                    @Html.DisplayFor(modelItem => item.ExporterName)
+                </div>
+            }
+        </div>
+
+
+        <h4>Importers</h4>
+        <div class="row">
+            @foreach (var item in Model.Importers)
+            {
+                <div class="col-md-3">
+                    @{
+                        bool selected = Model.SelectedImporterIDs.Contains(item.ImporterID) ? true : false;
+                    }
+                    <input type="checkbox" name="importer" value="@item.ImporterID" checked="@selected"/>
+                    @Html.DisplayFor(modelItem => item.ImporterName)
+                </div>
+            }
+        </div>
+        <input type="submit" value="Submit" />
+    }
+</div>
+

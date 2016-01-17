@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using HK.DAL;
 using HK.Models;
+using HK.ViewModels;
 
 namespace HK.Controllers
 {
@@ -15,14 +16,45 @@ namespace HK.Controllers
     {
 
         // GET: Containers
+
+        public ContainerFilters GetContainerFilters()
+        {
+            var containerFilters = new ContainerFilters();
+            containerFilters.SelectedExporterIDs = String.IsNullOrEmpty(Request.QueryString["exporter"]) ? new List<int>() : Request.QueryString["exporter"].Split(',').Select(Int32.Parse).ToList();
+            containerFilters.SelectedImporterIDs = String.IsNullOrEmpty(Request.QueryString["importer"]) ? new List<int>() : Request.QueryString["importer"].Split(',').Select(Int32.Parse).ToList();
+            containerFilters.Exporters = db.Exporters.Distinct().ToList();
+            containerFilters.Importers = db.Importers.Distinct().ToList();
+            return containerFilters;
+        }
+
+
         public ActionResult Index()
         {
-            return View(db.Containers.ToList());
+            var containerFilters = GetContainerFilters();
+            var containers = db.Containers.ToList();
+
+            if (containerFilters.SelectedExporterIDs.Count > 0)
+            {
+                containers = containers.Where(c => containerFilters.SelectedExporterIDs.Contains(c.ExporterID)).ToList();
+            }
+
+            if (containerFilters.SelectedImporterIDs.Count > 0)
+            {
+                containers = containers.Where(c => containerFilters.SelectedImporterIDs.Contains(c.ImporterID)).ToList();
+            }
+
+            return View(containers);
         }
 
         public ActionResult List()
         {
             return View(db.Containers.ToList());
+        }
+
+        public PartialViewResult Filters()
+        {
+            var containerFilters = GetContainerFilters();
+            return PartialView(containerFilters);
         }
 
         public Container GetCurrentContainer()
@@ -36,6 +68,8 @@ namespace HK.Controllers
 
             return currentContainer;
         }
+
+
 
         public ActionResult Load(int? id)
         {

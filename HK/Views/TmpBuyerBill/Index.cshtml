@@ -1,0 +1,15 @@
+﻿@model IEnumerable<String>
+
+@using (Html.BeginForm("Export", "TmpBuyerBill", FormMethod.Get))
+{
+
+    foreach (var buyer in Model)
+    {
+        <div class="col-md-3">
+            <input type="checkbox" name="buyer" value="@buyer" />
+            <span>@buyer</span>
+        </div>
+    }
+
+    <input type="submit" value="Submit" class="btn btn-default" />
+}

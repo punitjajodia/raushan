@@ -13,6 +13,7 @@ namespace HK.Models
         public string CartonNumber { get; set; }
         
         public string BuyerName { get; set; }
+        public string PartyName { get; set; }
         public string ProductCustomsName { get; set; }
         public string ProductBuyerName { get; set; }
         public ProductUnit ProductUnit { get; set; }

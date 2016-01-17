@@ -1,0 +1,54 @@
+﻿@model IEnumerable<HK.ViewModels.BuyerBillItem>
+
+<h2>Index</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            Marka
+        </th>
+        <th>
+            Product
+        </th>
+        <th>
+            Quantity
+        </th>
+        <th>
+            Rate
+        </th>
+        <th>
+            Total
+        </th>
+        
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+   
+            <td>
+                @Html.DisplayFor(modelItem => item.Marka)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Product)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Rate)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Total)
+            </td>
+
+         
+        </tr>
+    }
+
+</table>
+

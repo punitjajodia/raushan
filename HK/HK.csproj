@@ -181,6 +181,7 @@
     <Compile Include="Controllers\BuyerInvoicesController.cs" />
     <Compile Include="Controllers\BuyersController.cs" />
     <Compile Include="Controllers\ContainerItemsController.cs" />
+    <Compile Include="Controllers\TmpBuyerBillController.cs" />
     <Compile Include="Controllers\TmpContainersController.cs" />
     <Compile Include="Controllers\ContainersController.cs" />
     <Compile Include="Controllers\TmpContainerItemsController.cs" />
@@ -230,8 +231,10 @@
     <Compile Include="Models\TmpContainerItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\BuyerBillItem.cs" />
     <Compile Include="ViewModels\BuyerInvoiceItem.cs" />
     <Compile Include="ViewModels\BuyerVM.cs" />
+    <Compile Include="ViewModels\ContainerFilters.cs" />
     <Compile Include="ViewModels\InvoiceItem.cs" />
     <Compile Include="ViewModels\InvoiceItemExportVM.cs" />
     <Compile Include="ViewModels\PackingListVM.cs" />
@@ -546,7 +549,6 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\chosen_v1.4.2\bower.json" />
-    <Content Include="Content\ExcelTemplates\ImportPackingList.xlsx" />
     <Content Include="Scripts\bootstrap-table-1.8.1\.gitignore" />
     <Content Include="Scripts\bootstrap-table-1.8.1\.travis.yml" />
     <Content Include="Scripts\bootstrap-table-1.8.1\bootstrap-table.jquery.json" />
@@ -713,6 +715,9 @@
     <Content Include="Scripts\bootstrap-table-1.8.1\src\locale\bootstrap-table-en-US.js.template" />
     <Content Include="Scripts\bootstrap-table-1.8.1\src\locale\README.md" />
     <Content Include="Scripts\bootstrap-table-1.8.1\_config.yml" />
+    <Content Include="Content\ExcelTemplates\import-template.xlsx" />
+    <Content Include="Content\ExcelTemplates\sample-container.xlsx" />
+    <None Include="Properties\PublishProfiles\Dhanlaxmi through LAN.pubxml" />
     <None Include="Properties\PublishProfiles\Punit Local.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\chosen_v1.4.2\chosen-sprite%402x.png" />
@@ -785,6 +790,9 @@
     <Content Include="Views\TmpContainers\Fields.cshtml" />
     <Content Include="Views\TmpContainers\Index.cshtml" />
     <Content Include="Views\TmpContainers\List.cshtml" />
+    <Content Include="Views\TmpContainers\Filters.cshtml" />
+    <Content Include="Views\TmpBuyerBill\Index.cshtml" />
+    <Content Include="Views\TmpBuyerBill\Export.cshtml" />
     <None Include="Views\TmpDragDrop\Index.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
