@@ -15,6 +15,13 @@ namespace HK.Models
         public string BuyerName { get; set; }
 
         public string PartyName { get; set; }
+        public string PartyPhone { get; set; }
+        public string BillOnBoardingDate { get; set; }
+        public string BillDeliveryDate { get; set; }
+        public string BillNumber { get; set; }
+        public string BillTTDAPNumber { get; set; }
+        public string BillTTDAPDate { get; set; }
+        public string LotSize { get; set; }
 
         public string ProductCustomsName { get; set; }
         public string ProductBuyerName { get; set; }

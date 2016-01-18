@@ -187,6 +187,12 @@ namespace HK.Controllers
                                     {
                                        a.BuyerName,
                                        a.PartyName,
+                                       a.PartyPhone,
+                                       a.BillOnBoardingDate,
+                                       a.BillDeliveryDate,
+                                       a.BillNumber,
+                                       a.BillTTDAPDate,
+                                       a.BillTTDAPNumber,
                                        a.CartonNumber,
                                        a.ProductBuyerName,
                                        a.Quantity,

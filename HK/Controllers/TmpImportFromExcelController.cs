@@ -127,6 +127,13 @@ namespace HK.Controllers
                     CartonNumber = packingList.Field("CartonNumber").GetString(),
                     BuyerName = packingList.Field("BuyerName").GetString(),
                     PartyName = packingList.Field("PartyName").GetString(),
+                    PartyPhone = packingList.Field("PartyPhone").GetString(),
+                    BillOnBoardingDate = packingList.Field("BillOnBoardingDate").GetString(),
+                    BillDeliveryDate = packingList.Field("BillDeliveryDate").GetString(),
+                    BillNumber = packingList.Field("BillNumber").GetString(),
+                    BillTTDAPNumber = packingList.Field("BillTTDAPNumber").GetString(),
+                    BillTTDAPDate = packingList.Field("BillTTDAPDate").GetString(),
+                    LotSize = packingList.Field("LotSize").GetString(),
                     ProductCustomsName = packingList.Field("ProductCustomsName").GetString(),
                     ProductBuyerName = packingList.Field("ProductBuyerName").GetString(),
                     ProductUnit = packingList.Field("ProductUnit").GetString(),
@@ -141,12 +148,45 @@ namespace HK.Controllers
 
             foreach (var item in dataObj)
             {
-                    
                 var containerItem = new TmpContainerItem();
                 containerItem.ContainerID = CurrentContainerID;
                 containerItem.CartonNumber = item.CartonNumber;
                 containerItem.BuyerName = item.BuyerName;
-                containerItem.PartyName = item.PartyName;
+
+                var PartyData = String.IsNullOrEmpty(item.PartyName) ? 
+                    db.TmpContainerItems
+                    .Where(i =>
+                        i.BuyerName == item.BuyerName &&
+                        i.ContainerID == CurrentContainerID)
+                    .Select(i => new
+                        {
+                            i.PartyName,
+                            i.PartyPhone,
+                            i.BillOnBoardingDate,
+                            i.BillDeliveryDate,
+                            i.BillNumber,
+                            i.BillTTDAPNumber,
+                            i.BillTTDAPDate,
+                            i.LotSize
+                        }).FirstOrDefault() : new {
+                            item.PartyName,
+                            item.PartyPhone,
+                            item.BillOnBoardingDate,
+                            item.BillDeliveryDate,
+                            item.BillNumber,
+                            item.BillTTDAPNumber,
+                            item.BillTTDAPDate,
+                            item.LotSize
+                        };
+
+                containerItem.PartyName = PartyData.PartyName;
+                containerItem.PartyPhone = PartyData.PartyPhone;
+                containerItem.BillOnBoardingDate = PartyData.BillOnBoardingDate;
+                containerItem.BillDeliveryDate = PartyData.BillDeliveryDate;
+                containerItem.BillNumber = PartyData.BillNumber;
+                containerItem.BillTTDAPDate = PartyData.BillTTDAPDate;
+                containerItem.BillTTDAPNumber = PartyData.BillTTDAPNumber;
+
                 containerItem.ProductCustomsName = item.ProductCustomsName;
                 containerItem.ProductBuyerName = item.ProductBuyerName;
                 containerItem.ProductUnit = (ProductUnit)Enum.Parse(typeof(ProductUnit), item.ProductUnit.TrimEnd('.'));
