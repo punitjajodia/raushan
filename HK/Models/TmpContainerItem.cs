@@ -16,6 +16,7 @@ namespace HK.Models
 
         public string PartyName { get; set; }
         public string PartyPhone { get; set; }
+        public string JobNumber { get; set; }
         public string BillOnBoardingDate { get; set; }
         public string BillDeliveryDate { get; set; }
         public string BillNumber { get; set; }

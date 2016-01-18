@@ -42,11 +42,22 @@ namespace HK.Controllers
 
             var containerItems = db.TmpContainerItems.Where(t => t.ContainerID == CurrentContainerID).ToList();
 
+            var billInfo = containerItems
+                 .Where(c => items.Contains(c.PartyName))
+                 .Select(c => new {
+                     c.PartyName,
+                     c.PartyPhone,
+                     c.JobNumber,
+                     c.BillOnBoardingDate,
+                     c.BillDeliveryDate,
+                     c.BillNumber
+                 }).FirstOrDefault();
+
             var exportContainerItems = containerItems
                 .Where(c => items.Contains(c.PartyName))
                 .Select(c => new 
                 {
-                    Party = c.PartyName,
+                    Marka = c.BuyerName,
                     Product = c.ProductBuyerName,
                     Rate = c.BuyerUnitPrice,
                     Quantity = c.Quantity,
@@ -59,12 +70,30 @@ namespace HK.Controllers
             XLWorkbook wb = new XLWorkbook();
             var ws = wb.Worksheets.Add("Bill");
 
-            var table = ws.Cell("A2").InsertTable(exportContainerItems);
+        
+            ws.Cell("A1").SetValue("Job No.");
+            ws.Cell("B1").SetValue(billInfo.JobNumber);
+            ws.Cell("A2").SetValue("Party Name");
+            ws.Cell("B2").SetValue(billInfo.PartyName);
 
-            //table.ShowTotalsRow = true;
-            //table.Field(4).TotalsRowFunction = XLTotalsRowFunction.Sum;
+            ws.Cell("A3").SetValue("Party Phone");
+            ws.Cell("B3").SetValue(billInfo.PartyPhone);
+
+            ws.Cell("A4").SetValue("OnBoarding Date");
+            ws.Cell("B4").SetValue(billInfo.BillOnBoardingDate);
+
+            ws.Cell("A5").SetValue("Delivery Date");
+            ws.Cell("B5").SetValue(billInfo.BillDeliveryDate);
+
+            ws.Cell("A6").SetValue("BillNumber");
+            ws.Cell("B6").SetValue(billInfo.BillNumber);
+
+            var table = ws.Cell("A8").InsertTable(exportContainerItems);
+
+            table.ShowTotalsRow = true;
+            table.Field(5).TotalsRowFunction = XLTotalsRowFunction.Sum;
             ////// Just for fun let's add the text "Sum Of Income" to the totals row
-            //table.Field(3).TotalsRowLabel = "Total Cartons";
+            table.Field(4).TotalsRowLabel = "Total";
 
             ws.Columns().AdjustToContents();
 

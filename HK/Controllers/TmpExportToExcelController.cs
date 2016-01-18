@@ -188,6 +188,7 @@ namespace HK.Controllers
                                        a.BuyerName,
                                        a.PartyName,
                                        a.PartyPhone,
+                                       a.JobNumber,
                                        a.BillOnBoardingDate,
                                        a.BillDeliveryDate,
                                        a.BillNumber,

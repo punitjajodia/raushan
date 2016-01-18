@@ -220,6 +220,10 @@
     <Compile Include="Migrations\201601171849582_AddBillInfo.Designer.cs">
       <DependentUpon>201601171849582_AddBillInfo.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201601180910127_AddJobNumber.cs" />
+    <Compile Include="Migrations\201601180910127_AddJobNumber.Designer.cs">
+      <DependentUpon>201601180910127_AddJobNumber.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Buyer.cs" />
@@ -918,6 +922,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201601171849582_AddBillInfo.resx">
       <DependentUpon>201601171849582_AddBillInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601180910127_AddJobNumber.resx">
+      <DependentUpon>201601180910127_AddJobNumber.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

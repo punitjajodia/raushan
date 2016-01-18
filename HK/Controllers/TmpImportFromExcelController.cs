@@ -127,6 +127,7 @@ namespace HK.Controllers
                     CartonNumber = packingList.Field("CartonNumber").GetString(),
                     BuyerName = packingList.Field("BuyerName").GetString(),
                     PartyName = packingList.Field("PartyName").GetString(),
+                    JobNumber = packingList.Field("JobNumber").GetString(),
                     PartyPhone = packingList.Field("PartyPhone").GetString(),
                     BillOnBoardingDate = packingList.Field("BillOnBoardingDate").GetString(),
                     BillDeliveryDate = packingList.Field("BillDeliveryDate").GetString(),
@@ -162,6 +163,7 @@ namespace HK.Controllers
                         {
                             i.PartyName,
                             i.PartyPhone,
+                            i.JobNumber,
                             i.BillOnBoardingDate,
                             i.BillDeliveryDate,
                             i.BillNumber,
@@ -171,6 +173,7 @@ namespace HK.Controllers
                         }).FirstOrDefault() : new {
                             item.PartyName,
                             item.PartyPhone,
+                            item.JobNumber,
                             item.BillOnBoardingDate,
                             item.BillDeliveryDate,
                             item.BillNumber,
@@ -181,6 +184,7 @@ namespace HK.Controllers
 
                 containerItem.PartyName = PartyData.PartyName;
                 containerItem.PartyPhone = PartyData.PartyPhone;
+                containerItem.JobNumber = PartyData.JobNumber;
                 containerItem.BillOnBoardingDate = PartyData.BillOnBoardingDate;
                 containerItem.BillDeliveryDate = PartyData.BillDeliveryDate;
                 containerItem.BillNumber = PartyData.BillNumber;
