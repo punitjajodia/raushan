@@ -182,6 +182,8 @@ namespace HK.Controllers
                             item.LotSize
                         };
 
+
+
                 containerItem.PartyName = PartyData.PartyName;
                 containerItem.PartyPhone = PartyData.PartyPhone;
                 containerItem.JobNumber = PartyData.JobNumber;
@@ -191,7 +193,7 @@ namespace HK.Controllers
                 containerItem.BillTTDAPDate = PartyData.BillTTDAPDate;
                 containerItem.BillTTDAPNumber = PartyData.BillTTDAPNumber;
 
-                containerItem.ProductCustomsName = item.ProductCustomsName;
+               
                 containerItem.ProductBuyerName = item.ProductBuyerName;
                 containerItem.ProductUnit = (ProductUnit)Enum.Parse(typeof(ProductUnit), item.ProductUnit.TrimEnd('.'));
 
@@ -208,24 +210,61 @@ namespace HK.Controllers
                 
                 containerItem.BuyerCurrency = item.BuyerCurrency;
 
-                try
-                {
+                if(String.IsNullOrEmpty(item.BuyerUnitPrice)){
+                    containerItem.BuyerUnitPrice = 
+                                                 db.TmpContainerItems
+                                                .OrderByDescending(i => i.ContainerID)
+                                                .Where(i => i.BuyerName == item.BuyerName && i.ProductBuyerName == item.ProductBuyerName)
+                                                .Select(i => i.BuyerUnitPrice)
+                                                .FirstOrDefault();
+
+                }
+                else {
                     containerItem.BuyerUnitPrice = Convert.ToDecimal(item.BuyerUnitPrice);
                 }
-                catch
-                {
-                    containerItem.BuyerUnitPrice = 0;
-                }
-                
-                containerItem.CustomsCurrency = item.CustomsCurrency;
 
-                try
+                if (String.IsNullOrEmpty(item.ProductCustomsName))
+                {
+                    containerItem.ProductCustomsName =
+                                                 db.TmpContainerItems
+                                                .OrderByDescending(i => i.ContainerID)
+                                                .Where(i => i.BuyerName == item.BuyerName && i.ProductBuyerName == item.ProductBuyerName)
+                                                .Select(i => i.ProductCustomsName)
+                                                .FirstOrDefault();
+
+                }
+                else
+                {
+                    containerItem.ProductCustomsName = item.ProductCustomsName;
+                }
+
+                if (String.IsNullOrEmpty(item.CustomsCurrency))
+                {
+                    containerItem.CustomsCurrency =
+                                                 db.TmpContainerItems
+                                                .OrderByDescending(i => i.ContainerID)
+                                                .Where(i => i.BuyerName == item.BuyerName && i.ProductBuyerName == item.ProductBuyerName)
+                                                .Select(i => i.CustomsCurrency)
+                                                .FirstOrDefault();
+
+                }
+                else
+                {
+                    containerItem.CustomsCurrency = item.CustomsCurrency;
+                }
+
+                if (String.IsNullOrEmpty(item.CustomsUnitPrice))
+                {
+                    containerItem.CustomsUnitPrice =
+                                                 db.TmpContainerItems
+                                                .OrderByDescending(i => i.ContainerID)
+                                                .Where(i => i.BuyerName == item.BuyerName && i.ProductBuyerName == item.ProductBuyerName)
+                                                .Select(i => i.CustomsUnitPrice)
+                                                .FirstOrDefault();
+                }
+                else
                 {
                     containerItem.CustomsUnitPrice = Convert.ToDecimal(item.CustomsUnitPrice);
-                }
-                catch
-                {
-                    containerItem.CustomsUnitPrice = 0;
                 }
                 
 
