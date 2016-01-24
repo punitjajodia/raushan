@@ -30,18 +30,18 @@ namespace HK.Controllers
 
         public ActionResult Index()
         {
-            var containerFilters = GetContainerFilters();
+          //  var containerFilters = GetContainerFilters();
             var containers = db.Containers.ToList();
 
-            if (containerFilters.SelectedExporterIDs.Count > 0)
-            {
-                containers = containers.Where(c => containerFilters.SelectedExporterIDs.Contains(c.ExporterID)).ToList();
-            }
+            //if (containerFilters.SelectedExporterIDs.Count > 0)
+            //{
+            //    containers = containers.Where(c => containerFilters.SelectedExporterIDs.Contains(c.ExporterID)).ToList();
+            //}
 
-            if (containerFilters.SelectedImporterIDs.Count > 0)
-            {
-                containers = containers.Where(c => containerFilters.SelectedImporterIDs.Contains(c.ImporterID)).ToList();
-            }
+            //if (containerFilters.SelectedImporterIDs.Count > 0)
+            //{
+            //    containers = containers.Where(c => containerFilters.SelectedImporterIDs.Contains(c.ImporterID)).ToList();
+            //}
 
             return View(containers);
         }
@@ -60,7 +60,6 @@ namespace HK.Controllers
         public Container GetCurrentContainer()
         {
             var currentContainer = db.Containers.Where(c => c.ContainerID == CurrentContainerID)
-                .Include(c => c.Exporter)
                 .Include(c => c.Importer)
                 .Include(c => c.ContainerItems.Select(ci => ci.Product))
                 .Include(c => c.ContainerItems.Select(ci => ci.Buyer))
@@ -99,6 +98,9 @@ namespace HK.Controllers
         // GET: Containers/Create
         public PartialViewResult Create()
         {
+            ViewBag.Exporters = new SelectList(db.Containers.Select(c => c.ExporterName).Distinct());
+            ViewBag.Importers = new SelectList(db.Containers.Select(c => c.ImporterName).Distinct());
+
             ViewBag.ImporterID = new SelectList(db.Importers, "ImporterID", "ImporterName");
             ViewBag.ExporterID = new SelectList(db.Exporters, "ExporterID", "ExporterName");
             return PartialView();
@@ -135,7 +137,6 @@ namespace HK.Controllers
         {
             var container = new Container();
             container.Date = DateTime.Now;
-            container.ExporterID = 1;
             container.ImporterID = 1;
             db.Containers.Add(container);
             db.SaveChanges();
@@ -145,8 +146,9 @@ namespace HK.Controllers
 
         public PartialViewResult EditContainer()
         {
+            ViewBag.Exporters = new SelectList(db.Containers.Select(c => c.ExporterName).Distinct());
+            ViewBag.Importers = new SelectList(db.Containers.Select(c => c.ImporterName).Distinct());
             ViewBag.ImporterID = new SelectList(db.Importers, "ImporterID", "ImporterName");
-            ViewBag.ExporterID = new SelectList(db.Exporters, "ExporterID", "ExporterName");
             return PartialView("Edit", db.Containers.Find(CurrentContainerID));
         }
 
@@ -166,7 +168,7 @@ namespace HK.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
        // [ValidateAntiForgeryToken]
-        public PartialViewResult Edit([Bind(Include = "ContainerID,ContainerNumber,Date,ShippedPer,OnAbout,From,AirwayBillNumber,LetterOfCreditNumber,DrawnUnder, CostsIncluded, HarmonicCodes, TotalGrossWeight, TotalCartons, CountryOfOrigin, BeneficiaryBank, BeneficiarySwift, BeneficiaryUsdAccount, ImporterID, ExporterID")] Container container)
+        public PartialViewResult Edit([Bind(Include = "ContainerID,ContainerNumber,Date,ShippedPer,OnAbout,From,AirwayBillNumber,LetterOfCreditNumber,DrawnUnder, CostsIncluded, HarmonicCodes, TotalGrossWeight, TotalCartons, CountryOfOrigin, BeneficiaryBank, BeneficiarySwift, BeneficiaryUsdAccount, ImporterID, ExporterName")] Container container)
         {
             container.ContainerID = CurrentContainerID;
             if (ModelState.IsValid)
@@ -177,8 +179,12 @@ namespace HK.Controllers
             }
             else
             {
-                container = new ContainersController().GetCurrentContainer();
+                container = new TmpContainersController().GetCurrentContainer();
             }
+
+            ViewBag.Exporters = new SelectList(db.Containers.Select(c => c.ExporterName).Distinct());
+            ViewBag.Importers = new SelectList(db.Containers.Select(c => c.ImporterName).Distinct());
+
             ViewBag.ImporterID = new SelectList(db.Importers, "ImporterID", "ImporterName");
             ViewBag.ExporterID = new SelectList(db.Exporters, "ExporterID", "ExporterName");
             return PartialView("Edit", container);

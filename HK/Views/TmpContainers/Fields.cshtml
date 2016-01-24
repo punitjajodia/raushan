@@ -2,13 +2,14 @@
     <div class="row">
         <div class="col-md-8">
             <div class="form-group">
-                @Html.LabelFor(model => model.ExporterID, "Exporter", htmlAttributes: new { @class="control-label col-md-3"})
+                @Html.LabelFor(model => model.ExporterName, "Exporter", htmlAttributes: new { @class = "control-label col-md-3" })
                 <div class="col-md-8">
-                    @Html.DropDownList("ExporterID", null, htmlAttributes: new { @class = "" })
+                    @Html.EditorFor(model => model.ExporterName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ExporterName, "", new { @class = "text-danger" })
                     <img id="add-exporter" src="~/Content/images/add.png" />
                     <div>
-                        <h3>@(Model == null || Model.Exporter == null ? "" : Model.Exporter.ExporterName)</h3>
-                        @(Html.Raw(Model == null || Model.Exporter == null ? "" : Model.Exporter.ExporterAddress.Replace(System.Environment.NewLine, "<br />")))
+                        <h3>@(Model.ExporterName == null ? "" : Model.ExporterName)</h3>
+                       @(Model.ExporterAddress == null? "" : Model.ExporterAddress.Replace(System.Environment.NewLine, "<br />"))
                     </div>
                 </div>
             </div>

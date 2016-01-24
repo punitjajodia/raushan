@@ -38,7 +38,7 @@ namespace HK.Controllers
 
         public PartialViewResult List()
         {
-            var currentContainer = new ContainersController().GetCurrentContainer();
+            var currentContainer = new TmpContainersController().GetCurrentContainer();
             var containerItems = currentContainer.ContainerItems;
 
         

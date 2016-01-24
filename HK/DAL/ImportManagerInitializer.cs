@@ -52,7 +52,6 @@ namespace HK.DAL
                     LetterOfCreditNumber = "D/P SYSTEM",
                     DrawnUnder = "NEPAL CREDIT AND COMMERCE BANK LTD. KATHMANDU NP",
                     ImporterID = 1,
-                    ExporterID = 1
                     //Importer = "M/S. DHANALAXMI ENTERPRISES KATHMANDU, NEPAL (TAX CERTIFICATE NO. 300704864)"
                 },
                 new Container { 
@@ -65,7 +64,6 @@ namespace HK.DAL
                     LetterOfCreditNumber = "D/P SYSTEM",
                     DrawnUnder = "NEPAL CREDIT AND COMMERCE BANK LTD. KATHMANDU NP",
                     ImporterID = 1,
-                    ExporterID = 2
                    // Importer = "M/S. DHANALAXMI ENTERPRISES KATHMANDU, NEPAL (TAX CERTIFICATE NO. 300704864)"
                 }
             };

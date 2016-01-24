@@ -91,23 +91,14 @@ namespace HK.Controllers
                 if (ModelState.IsValid)
                 {
                     //If container with container ID already exists, update it otherwise insert new
-
-                    if (db.Containers.Any(c => c.ContainerID == container.ContainerID))
-                    {
-                        db.Entry(container).State = EntityState.Modified;
-                    }
-                    else
-                    {
-                        db.Containers.Add(container);
-                        
-                    }
+                    container.ContainerID = CurrentContainerID;
+                    db.Entry(container).State = EntityState.Modified;
                     db.SaveChanges();
-                    Session["CurrentContainerID"] = container.ContainerID;
                 }
             }
             catch (Exception e)
             {
-
+                throw e;
             }
 
             DeleteAllContainerItems();
@@ -228,7 +219,7 @@ namespace HK.Controllers
                     containerItem.ProductCustomsName =
                                                  db.TmpContainerItems
                                                 .OrderByDescending(i => i.ContainerID)
-                                                .Where(i => i.BuyerName == item.BuyerName && i.ProductBuyerName == item.ProductBuyerName)
+                                                .Where(i => i.ProductBuyerName == item.ProductBuyerName)
                                                 .Select(i => i.ProductCustomsName)
                                                 .FirstOrDefault();
 
@@ -243,7 +234,7 @@ namespace HK.Controllers
                     containerItem.CustomsCurrency =
                                                  db.TmpContainerItems
                                                 .OrderByDescending(i => i.ContainerID)
-                                                .Where(i => i.BuyerName == item.BuyerName && i.ProductBuyerName == item.ProductBuyerName)
+                                                .Where(i => i.ProductBuyerName == item.ProductBuyerName)
                                                 .Select(i => i.CustomsCurrency)
                                                 .FirstOrDefault();
 
@@ -258,7 +249,7 @@ namespace HK.Controllers
                     containerItem.CustomsUnitPrice =
                                                  db.TmpContainerItems
                                                 .OrderByDescending(i => i.ContainerID)
-                                                .Where(i => i.BuyerName == item.BuyerName && i.ProductBuyerName == item.ProductBuyerName)
+                                                .Where(i => i.ProductBuyerName == item.ProductBuyerName)
                                                 .Select(i => i.CustomsUnitPrice)
                                                 .FirstOrDefault();
                 }

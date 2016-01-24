@@ -55,14 +55,24 @@ namespace HK.Controllers
 
             var exportContainerItems = containerItems
                 .Where(c => items.Contains(c.PartyName))
-                .Select(c => new 
+                .GroupBy(c => new {
+                    c.BuyerName,
+                    c.ProductBuyerName,
+                    c.BuyerUnitPrice,
+                    c.ProductUnit
+                })
+                .Select(group => new 
                 {
-                    Marka = c.BuyerName,
-                    Product = c.ProductBuyerName,
-                    Rate = c.BuyerUnitPrice,
-                    Quantity = c.Quantity,
-                    Unit = c.ProductUnit,
-                    Total = c.BuyerUnitPrice * c.Quantity
+                    Cartons = group.Sum(i => i.Cartons),
+                    Marka = group.Key.BuyerName,
+
+                    Product = group.Key.ProductBuyerName,
+                    
+                    Rate = group.Key.BuyerUnitPrice,
+                    Quantity = group.Sum(i => i.Quantity),
+                    Unit = group.Key.ProductUnit,
+                    
+                    Total = group.Key.BuyerUnitPrice * group.Sum(i => i.Quantity)
                 })
                 .ToList();
 

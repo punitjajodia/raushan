@@ -20,10 +20,10 @@ namespace HK.Controllers
 
         public void AddContainerInfo(IXLWorksheet ws, Container container)
         {
-            ws.Cell("A1").SetValue(container.Exporter.ExporterName).Style.Font.FontSize = 20;
+            ws.Cell("A1").SetValue(container.ExporterName).Style.Font.FontSize = 20;
             ws.Range("A1:E1").Merge();
 
-            ws.Cell("A2").SetValue(container.Exporter.ExporterAddress).Style.Alignment.WrapText = true;
+            ws.Cell("A2").SetValue(container.ExporterAddress).Style.Alignment.WrapText = true;
             ws.Range("A2:B3").Merge();
 
             ws.Cell("A5").SetValue("Shipped Per");
@@ -90,7 +90,7 @@ namespace HK.Controllers
 
         public void ExportPackingList()
         {
-            var container = new ContainersController().GetCurrentContainer();
+            var container = new TmpContainersController().GetCurrentContainer();
             
             var containerItems = container.ContainerItems.Select(c => new
             {
@@ -138,7 +138,7 @@ namespace HK.Controllers
 
         public ActionResult ExportInvoice()
         {
-            var container = new ContainersController().GetCurrentContainer();
+            var container = new TmpContainersController().GetCurrentContainer();
             var invoices = new InvoicesController().GetInvoices(container).Select(i => new InvoiceItemExportVM(i));
 
             XLWorkbook wb = new XLWorkbook();

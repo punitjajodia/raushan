@@ -13,7 +13,6 @@ namespace HK.Controllers
 {
     public class TmpContainerItemsController : BaseController
     {
-        private ImportManagerContext db = new ImportManagerContext();
 
         // GET: TmpContainerItems
         public PartialViewResult Index()

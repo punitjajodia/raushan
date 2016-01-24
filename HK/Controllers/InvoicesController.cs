@@ -19,7 +19,7 @@ namespace HK.Controllers
 
         public List<InvoiceItem> GetInvoices()
         {
-            var container = new ContainersController().GetCurrentContainer();
+            var container = new TmpContainersController().GetCurrentContainer();
             var containerItems = container.ContainerItems;
             return GetInvoices(containerItems);
         }

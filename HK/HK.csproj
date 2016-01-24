@@ -24,6 +24,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -183,9 +185,9 @@
     <Compile Include="Controllers\ContainerItemsController.cs" />
     <Compile Include="Controllers\TmpBuyerBillController.cs" />
     <Compile Include="Controllers\TmpContainersController.cs" />
-    <Compile Include="Controllers\ContainersController.cs" />
     <Compile Include="Controllers\TmpContainerItemsController.cs" />
     <Compile Include="Controllers\TmpDashboardController.cs" />
+    <Compile Include="Controllers\TmpDeliveryController.cs" />
     <Compile Include="Controllers\TmpExportToExcelController.cs" />
     <Compile Include="Controllers\TmpImportFromExcelController.cs" />
     <Compile Include="Controllers\TmpDragDropController.cs" />
@@ -223,6 +225,14 @@
     <Compile Include="Migrations\201601180910127_AddJobNumber.cs" />
     <Compile Include="Migrations\201601180910127_AddJobNumber.Designer.cs">
       <DependentUpon>201601180910127_AddJobNumber.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601230021597_AddImporterAndExporterToContainer.cs" />
+    <Compile Include="Migrations\201601230021597_AddImporterAndExporterToContainer.Designer.cs">
+      <DependentUpon>201601230021597_AddImporterAndExporterToContainer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601242252136_RemoveExporterID.cs" />
+    <Compile Include="Migrations\201601242252136_RemoveExporterID.Designer.cs">
+      <DependentUpon>201601242252136_RemoveExporterID.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -864,13 +874,7 @@
     <Content Include="Views\ContainerItems\CreateAndView.cshtml" />
     <Content Include="Views\ContainerItems\List.cshtml" />
     <Content Include="Views\Invoices\List.cshtml" />
-    <Content Include="Views\Containers\Create.cshtml" />
-    <Content Include="Views\Containers\Delete.cshtml" />
-    <Content Include="Views\Containers\Details.cshtml" />
-    <Content Include="Views\Containers\Edit.cshtml" />
-    <Content Include="Views\Containers\Index.cshtml" />
     <Content Include="Views\Dashboard\List.cshtml" />
-    <Content Include="Views\Containers\Fields.cshtml" />
     <Content Include="Views\FileUpload\Form.cshtml" />
     <Content Include="Views\Importers\Create.cshtml" />
     <Content Include="Views\Importers\Delete.cshtml" />
@@ -890,7 +894,6 @@
     <Content Include="Views\ProductContainerPrices\Details.cshtml" />
     <Content Include="Views\ProductContainerPrices\Edit.cshtml" />
     <Content Include="Views\ProductContainerPrices\Index.cshtml" />
-    <Content Include="Views\Containers\List.cshtml" />
     <Content Include="Views\BuyerInvoices\List.cshtml" />
     <Content Include="Views\ProductContainerBuyerPrices\Create.cshtml" />
     <Content Include="Views\ProductContainerBuyerPrices\Delete.cshtml" />
@@ -902,6 +905,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\ExportToExcel\" />
+    <Folder Include="Views\TmpDelivery\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -925,6 +929,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201601180910127_AddJobNumber.resx">
       <DependentUpon>201601180910127_AddJobNumber.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601230021597_AddImporterAndExporterToContainer.resx">
+      <DependentUpon>201601230021597_AddImporterAndExporterToContainer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601242252136_RemoveExporterID.resx">
+      <DependentUpon>201601242252136_RemoveExporterID.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
@@ -955,6 +965,13 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

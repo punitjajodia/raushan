@@ -15,7 +15,7 @@ namespace HK.Models
         public PackingListVM GetPackingList()
         {
             var PackingList = new PackingListVM();
-            PackingList.Container = new ContainersController().GetCurrentContainer();
+            PackingList.Container = new TmpContainersController().GetCurrentContainer();
 
             PackingList.Container.ContainerItems = PackingList.Container.ContainerItems.OrderBy(ci => ci.BuyerID).ToList();
 
