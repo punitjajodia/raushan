@@ -60,9 +60,6 @@ namespace HK.Controllers
         public Container GetCurrentContainer()
         {
             var currentContainer = db.Containers.Where(c => c.ContainerID == CurrentContainerID)
-                .Include(c => c.Importer)
-                .Include(c => c.ContainerItems.Select(ci => ci.Product))
-                .Include(c => c.ContainerItems.Select(ci => ci.Buyer))
                 .FirstOrDefault();
 
             return currentContainer;
@@ -137,7 +134,6 @@ namespace HK.Controllers
         {
             var container = new Container();
             container.Date = DateTime.Now;
-            container.ImporterID = 1;
             db.Containers.Add(container);
             db.SaveChanges();
             Session["CurrentContainerID"] = container.ContainerID;
@@ -168,7 +164,7 @@ namespace HK.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
        // [ValidateAntiForgeryToken]
-        public PartialViewResult Edit([Bind(Include = "ContainerID,ContainerNumber,Date,ShippedPer,OnAbout,From,AirwayBillNumber,LetterOfCreditNumber,DrawnUnder, CostsIncluded, HarmonicCodes, TotalGrossWeight, TotalCartons, CountryOfOrigin, BeneficiaryBank, BeneficiarySwift, BeneficiaryUsdAccount, ImporterID, ExporterName")] Container container)
+        public PartialViewResult Edit([Bind(Include = "ContainerID,ContainerNumber,Date,ShippedPer,OnAbout,From,AirwayBillNumber,LetterOfCreditNumber,DrawnUnder, CostsIncluded, HarmonicCodes, TotalGrossWeight, TotalCartons, CountryOfOrigin, BeneficiaryBank, BeneficiarySwift, BeneficiaryUsdAccount, ImporterName, ExporterName")] Container container)
         {
             container.ContainerID = CurrentContainerID;
             if (ModelState.IsValid)

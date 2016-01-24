@@ -154,13 +154,14 @@
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                @Html.LabelFor(model => model.ImporterID, "Importer", htmlAttributes: new { @class = "control-label col-md-4" })
+                @Html.LabelFor(model => model.ImporterName, "Importer", htmlAttributes: new { @class = "control-label col-md-4" })
                 <div class="col-md-8">
-                    @Html.DropDownList("ImporterID", null, htmlAttributes: new { @class = "" })
+                    @Html.EditorFor(model => model.ImporterName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ImporterName, "", new { @class = "text-danger" })
                     <img id="add-importer" src="~/Content/images/add.png" />
                     <div>
-                        <h3>@(Model == null || Model.Importer == null ? "" : Model.Importer.ImporterName)</h3>
-                        @(Html.Raw(Model == null || Model.Importer == null ? "" : Model.Importer.ImporterAddress.Replace(System.Environment.NewLine, "<br />")))
+                        <h3>@(Model == null || Model.ImporterName == null ? "" : Model.ImporterName)</h3>
+                        @(Html.Raw(Model == null || Model.ImporterAddress == null ? "" : Model.ImporterAddress.Replace(System.Environment.NewLine, "<br />")))
                     </div>
                 </div>
             </div>

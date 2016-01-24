@@ -40,7 +40,7 @@
                 @Html.DisplayNameFor(model => model.ExporterName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Importer)
+                @Html.DisplayNameFor(model => model.ImporterName)
             </th>
 
             <th></th>
@@ -79,7 +79,7 @@
                     @Html.DisplayFor(modelItem => item.ExporterName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Importer.ImporterName)
+                    @Html.DisplayFor(modelItem => item.ImporterName)
                 </td>
                 <td>
                     @Html.ActionLink("Delete", "Delete", new { id = item.ContainerID }) |

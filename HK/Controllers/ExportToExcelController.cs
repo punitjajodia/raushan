@@ -66,9 +66,9 @@ namespace HK.Controllers
 
 
             //Importer
-            ws.Cell("D5").SetValue(container.Importer.ImporterName +
-                                        "\n" + container.Importer.ImporterAddress +
-                                        "\n" + container.Importer.TaxCertificateNumber)
+            ws.Cell("D5").SetValue(container.ImporterName +
+                                        "\n" + container.ImporterAddress +
+                                        "\n" + container.ImporterTaxCertificateNumber)
                                         .Style
                                             .Alignment.SetVertical(XLAlignmentVerticalValues.Center)
                                             .Alignment.SetWrapText();

@@ -151,9 +151,9 @@ namespace HK.Controllers
                 .Alignment.SetVertical(XLAlignmentVerticalValues.Top);
 
             //Importer
-            ws.Cell("E5").SetValue(container.Importer.ImporterName +
-                                        "\n" + container.Importer.ImporterAddress +
-                                        "\n" + container.Importer.TaxCertificateNumber)
+            ws.Cell("E5").SetValue(container.ImporterName +
+                                        "\n" + container.ImporterAddress +
+                                        "\n" + container.ImporterTaxCertificateNumber)
                                         .Style
                                             .Alignment.SetVertical(XLAlignmentVerticalValues.Top)
                                             .Alignment.SetWrapText();
@@ -492,10 +492,10 @@ namespace HK.Controllers
                 ExpandDescription(ws, currentRow);
             }
 
-            if (!String.IsNullOrWhiteSpace(container.Importer.TaxCertificateNumber))
+            if (!String.IsNullOrWhiteSpace(container.ImporterTaxCertificateNumber))
             {
                 currentRow = currentRow.RowBelow();
-                currentRow.Cell((int)CustomsInvoiceHeaders.Description).SetValue(String.Concat("WE HEREBY CERTIFYING THAT SHOWING EXACT QUANTITY SHIPPED APPLICANT's TAX CERTIFICATE NO.", container.Importer.TaxCertificateNumber));
+                currentRow.Cell((int)CustomsInvoiceHeaders.Description).SetValue(String.Concat("WE HEREBY CERTIFYING THAT SHOWING EXACT QUANTITY SHIPPED APPLICANT's TAX CERTIFICATE NO.", container.ImporterTaxCertificateNumber));
                 ExpandDescription(ws, currentRow);
             }
 

@@ -234,6 +234,10 @@
     <Compile Include="Migrations\201601242252136_RemoveExporterID.Designer.cs">
       <DependentUpon>201601242252136_RemoveExporterID.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201601242311362_RemovedImporterID.cs" />
+    <Compile Include="Migrations\201601242311362_RemovedImporterID.Designer.cs">
+      <DependentUpon>201601242311362_RemovedImporterID.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Buyer.cs" />
@@ -935,6 +939,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201601242252136_RemoveExporterID.resx">
       <DependentUpon>201601242252136_RemoveExporterID.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601242311362_RemovedImporterID.resx">
+      <DependentUpon>201601242311362_RemovedImporterID.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

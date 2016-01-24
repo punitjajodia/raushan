@@ -62,12 +62,11 @@ namespace HK.Models
         public string ImporterName { get; set; }
 
         public string ImporterAddress { get; set; }
+        public string ImporterTaxCertificateNumber { get; set; }
 
         public string ExporterName { get; set; }
         public string ExporterAddress { get; set; }
 
-        public int ImporterID { get; set; }
-        public virtual Importer Importer { get; set; }
 
         public virtual List<ContainerItem> ContainerItems { get; set; }
 

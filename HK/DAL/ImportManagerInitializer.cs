@@ -50,9 +50,7 @@ namespace HK.DAL
                     From="CHINA TO CALCUTTA SEA PORT OF INDIA IN TRANSIT TO NEPAL VIA BIRGUNJ CUSTOM OFFICE BIRGUNJ",
                     AirwayBillNumber = "",
                     LetterOfCreditNumber = "D/P SYSTEM",
-                    DrawnUnder = "NEPAL CREDIT AND COMMERCE BANK LTD. KATHMANDU NP",
-                    ImporterID = 1,
-                    //Importer = "M/S. DHANALAXMI ENTERPRISES KATHMANDU, NEPAL (TAX CERTIFICATE NO. 300704864)"
+                    DrawnUnder = "NEPAL CREDIT AND COMMERCE BANK LTD. KATHMANDU NP"
                 },
                 new Container { 
                     ContainerNumber = "SI-452324/2015",
@@ -62,9 +60,7 @@ namespace HK.DAL
                     From="CHINA TO CALCUTTA SEA PORT OF INDIA IN TRANSIT TO NEPAL VIA BIRGUNJ CUSTOM OFFICE BIRGUNJ",
                     AirwayBillNumber = "",
                     LetterOfCreditNumber = "D/P SYSTEM",
-                    DrawnUnder = "NEPAL CREDIT AND COMMERCE BANK LTD. KATHMANDU NP",
-                    ImporterID = 1,
-                   // Importer = "M/S. DHANALAXMI ENTERPRISES KATHMANDU, NEPAL (TAX CERTIFICATE NO. 300704864)"
+                    DrawnUnder = "NEPAL CREDIT AND COMMERCE BANK LTD. KATHMANDU NP"
                 }
             };
             containers.ForEach(c => context.Containers.Add(c));
