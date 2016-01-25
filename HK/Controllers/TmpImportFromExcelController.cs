@@ -67,26 +67,12 @@ namespace HK.Controllers
                     var prop = containerRow.Cell(1).GetString();
                     var value = containerRow.Cell(2).Value;
 
-                    if (prop.EndsWith("ID", true, System.Globalization.CultureInfo.CurrentCulture))
-                    {
-                        try
-                        {
-                            value = Convert.ToInt32(value);
-                        }
-                        catch (FormatException e)
-                        {
-                            value = 0;
-                        }
-                        
-                    }
-
                     Type type = container.GetType();
                     PropertyInfo containerProp = type.GetProperty(prop);
                     containerProp.SetValue(container, value, null);
                     containerRow = containerRow.RowBelow();
                 }
                 
-               
 
                 if (ModelState.IsValid)
                 {
@@ -173,8 +159,6 @@ namespace HK.Controllers
                             item.LotSize
                         };
 
-
-
                 containerItem.PartyName = PartyData.PartyName;
                 containerItem.PartyPhone = PartyData.PartyPhone;
                 containerItem.JobNumber = PartyData.JobNumber;
@@ -205,7 +189,7 @@ namespace HK.Controllers
                     containerItem.BuyerUnitPrice = 
                                                  db.TmpContainerItems
                                                 .OrderByDescending(i => i.ContainerID)
-                                                .Where(i => i.BuyerName == item.BuyerName && i.ProductBuyerName == item.ProductBuyerName)
+                                                .Where(i => i.PartyName == item.PartyName && i.ProductBuyerName == item.ProductBuyerName)
                                                 .Select(i => i.BuyerUnitPrice)
                                                 .FirstOrDefault();
 

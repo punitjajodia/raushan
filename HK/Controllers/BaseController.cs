@@ -18,7 +18,7 @@ namespace HK.Controllers
                 if (System.Web.HttpContext.Current.Session == null || System.Web.HttpContext.Current.Session["CurrentContainerID"] == null)
                 {
                     var containerID = 0;
-                    if (db.ContainerItems.Count() > 0)
+                    if (db.Containers.Count() > 0)
                     {
                         containerID = db.Containers.OrderByDescending(c => c.ContainerID).First().ContainerID;
                     }

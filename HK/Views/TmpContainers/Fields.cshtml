@@ -6,7 +6,7 @@
                 <div class="col-md-8">
                     @Html.EditorFor(model => model.ExporterName, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.ExporterName, "", new { @class = "text-danger" })
-                    <img id="add-exporter" src="~/Content/images/add.png" />
+                    @*<img id="add-exporter" src="~/Content/images/add.png" />*@
                     <div>
                         <h3>@(Model.ExporterName == null ? "" : Model.ExporterName)</h3>
                        @(Model.ExporterAddress == null? "" : Model.ExporterAddress.Replace(System.Environment.NewLine, "<br />"))
@@ -158,7 +158,7 @@
                 <div class="col-md-8">
                     @Html.EditorFor(model => model.ImporterName, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.ImporterName, "", new { @class = "text-danger" })
-                    <img id="add-importer" src="~/Content/images/add.png" />
+                    @*<img id="add-importer" src="~/Content/images/add.png" />*@
                     <div>
                         <h3>@(Model == null || Model.ImporterName == null ? "" : Model.ImporterName)</h3>
                         @(Html.Raw(Model == null || Model.ImporterAddress == null ? "" : Model.ImporterAddress.Replace(System.Environment.NewLine, "<br />")))
