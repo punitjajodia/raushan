@@ -141,7 +141,6 @@ namespace HK.Controllers
                     .Select(i => new
                         {
                             i.PartyName,
-                            i.PartyPhone,
                             i.JobNumber,
                             i.BillOnBoardingDate,
                             i.BillDeliveryDate,
@@ -151,7 +150,6 @@ namespace HK.Controllers
                             i.LotSize
                         }).FirstOrDefault() : new {
                             item.PartyName,
-                            item.PartyPhone,
                             item.JobNumber,
                             item.BillOnBoardingDate,
                             item.BillDeliveryDate,
@@ -162,7 +160,6 @@ namespace HK.Controllers
                         };
 
                 containerItem.PartyName = PartyData.PartyName;
-                containerItem.PartyPhone = PartyData.PartyPhone;
                 containerItem.JobNumber = PartyData.JobNumber;
                 containerItem.BillOnBoardingDate = PartyData.BillOnBoardingDate;
                 containerItem.BillDeliveryDate = PartyData.BillDeliveryDate;

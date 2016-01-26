@@ -153,7 +153,7 @@ namespace HK.Controllers
             //Importer
             ws.Cell("E5").SetValue(container.ImporterName +
                                         "\n" + container.ImporterAddress +
-                                        "\n" + container.ImporterTaxCertificateNumber)
+                                        "\n" + "(TAX CERTIFICATE NO. " + container.ImporterTaxCertificateNumber + ")")
                                         .Style
                                             .Alignment.SetVertical(XLAlignmentVerticalValues.Top)
                                             .Alignment.SetWrapText();
@@ -187,7 +187,6 @@ namespace HK.Controllers
                                     {
                                        a.Marka,
                                        a.PartyName,
-                                       a.PartyPhone,
                                        a.JobNumber,
                                        a.LotSize,
                                        a.BillOnBoardingDate,
@@ -307,15 +306,19 @@ namespace HK.Controllers
 
             var containerItems = db.TmpContainerItems
                                     .Where(a => a.ContainerID == CurrentContainerID)
-                                    .Select(a => new
+                                    .GroupBy(a => new
                                     {
-                                        a.Marka,
-                        
-                                        a.CartonNumber,
                                         a.ProductCustomsName,
-                                        a.Quantity,
-                                        a.ProductUnit,
-                                        a.BuyerUnitPrice
+                                        a.CustomsProductUnit
+                                    })
+                                    .Select(group => new
+                                    {
+                                        CTNS = group.Sum(b => b.Cartons),
+                                        Description = group.Key.ProductCustomsName,
+                                        Quantity = group.Sum(b => b.CustomsQuantity),
+                                        Unit = group.Key.CustomsProductUnit,
+                                        NetWeight = "",
+                                        GrossWeight = ""
                                     });
 
             XLWorkbook wb = new XLWorkbook();
@@ -325,11 +328,43 @@ namespace HK.Controllers
             AddContainerInfo(ws, container);
 
             var table = ws.Cell("A12").InsertTable(containerItems);
+      
 
             //table.ShowTotalsRow = true;
-            //table.Field(4).TotalsRowFunction = XLTotalsRowFunction.Sum;
-            ////// Just for fun let's add the text "Sum Of Income" to the totals row
-            //table.Field(3).TotalsRowLabel = "Total Cartons";
+            //table.Field(0).TotalsRowFunction = XLTotalsRowFunction.Sum;
+            //////// Just for fun let's add the text "Sum Of Income" to the totals row
+            ////table.Field(3).TotalsRowLabel = "Total Cartons";
+
+            var currentRow = ws.LastRowUsed();
+            currentRow = currentRow.RowBelow();
+
+            var totalContainers = db.TmpContainerItems
+                                    .Where(a => a.ContainerID == CurrentContainerID)
+                                    .Sum(a => a.Cartons);
+
+            currentRow.Cell(1).SetValue(totalContainers.ToString() + " CTNS");
+            currentRow.Cell(1).Style.Border.SetTopBorder(XLBorderStyleValues.Thick)
+                .Border.SetBottomBorder(XLBorderStyleValues.Double);
+
+            ws.Range(currentRow.Cell(5), currentRow.Cell(6)).Merge().SetValue(container.TotalGrossWeight)
+                .Style.Border.SetTopBorder(XLBorderStyleValues.Thick)
+                      .Border.SetBottomBorder(XLBorderStyleValues.Double)
+                      .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
+
+
+            currentRow = currentRow.RowBelow().RowBelow().RowBelow();
+
+            currentRow.Cell(2).SetValue("TOTAL G.W. = " + container.TotalGrossWeight);
+            currentRow = currentRow.RowBelow();
+            currentRow.Cell(2).SetValue("TOTAL CTN. = " + container.TotalCartons);
+            currentRow = currentRow.RowBelow();
+
+            currentRow.Cell(2).SetValue("COUNTRY OF ORIGIN : " + container.CountryOfOrigin);
+            currentRow = currentRow.RowBelow();
+
+            ws.Range(currentRow.Cell(2), currentRow.Cell(6)).Merge()
+                .SetValue("GOODS TO BE PACKED IN STRONG, EXPORT STANDARD SEA-ROAD WORTHY PACKING")
+                .Style.Font.SetFontSize(9.0);
 
             ws.Columns().AdjustToContents();
 
@@ -360,19 +395,19 @@ namespace HK.Controllers
 
             var containerItems = db.TmpContainerItems
                                     .Where(a => a.ContainerID == CurrentContainerID)
-                                    .GroupBy(a => new { a.ProductCustomsName, a.ProductUnit, a.CustomsUnitPrice, a.CustomsCurrency })
+                                    .GroupBy(a => new { a.ProductCustomsName, a.CustomsProductUnit, a.CustomsUnitPrice, a.CustomsCurrency })
                                     .OrderBy(a => a.Key.ProductCustomsName)
                                     .AsEnumerable()
                                     .Select((group, inc) => new
                                     {
                                         SN = (inc + 1),
                                         ProductCustomsName = group.Key.ProductCustomsName,
-                                        Quantity = group.Sum(b => b.Quantity),
-                                        Unit = group.Key.ProductUnit,
+                                        Quantity = group.Sum(b => b.CustomsQuantity),
+                                        Unit = group.Key.CustomsProductUnit,
                                         UnitPriceCurrency = group.Key.CustomsCurrency,
                                         Rate = group.Key.CustomsUnitPrice,
                                         AmountCurrency = group.Key.CustomsCurrency,
-                                        Amount = group.Sum(b => b.Quantity) * group.Key.CustomsUnitPrice
+                                        Amount = group.Sum(b => b.CustomsQuantity) * group.Key.CustomsUnitPrice
                                     });
 
             XLWorkbook wb = new XLWorkbook();

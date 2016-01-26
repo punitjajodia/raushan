@@ -253,6 +253,10 @@
     <Compile Include="Migrations\201601260314172_AddCustomsQuantity.Designer.cs">
       <DependentUpon>201601260314172_AddCustomsQuantity.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201601260342423_RemovePartyPhone.cs" />
+    <Compile Include="Migrations\201601260342423_RemovePartyPhone.Designer.cs">
+      <DependentUpon>201601260342423_RemovePartyPhone.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Buyer.cs" />
@@ -968,6 +972,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201601260314172_AddCustomsQuantity.resx">
       <DependentUpon>201601260314172_AddCustomsQuantity.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601260342423_RemovePartyPhone.resx">
+      <DependentUpon>201601260342423_RemovePartyPhone.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

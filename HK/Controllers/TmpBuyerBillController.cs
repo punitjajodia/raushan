@@ -46,7 +46,6 @@ namespace HK.Controllers
                  .Where(c => items.Contains(c.PartyName))
                  .Select(c => new {
                      c.PartyName,
-                     c.PartyPhone,
                      c.JobNumber,
                      c.BillOnBoardingDate,
                      c.BillDeliveryDate,
@@ -85,19 +84,17 @@ namespace HK.Controllers
             ws.Cell("A2").SetValue("Party Name");
             ws.Cell("B2").SetValue(billInfo.PartyName);
 
-            ws.Cell("A3").SetValue("Party Phone");
-            ws.Cell("B3").SetValue(billInfo.PartyPhone);
 
-            ws.Cell("A4").SetValue("OnBoarding Date");
-            ws.Cell("B4").SetValue(billInfo.BillOnBoardingDate);
+            ws.Cell("A3").SetValue("OnBoarding Date");
+            ws.Cell("B3").SetValue(billInfo.BillOnBoardingDate);
 
-            ws.Cell("A5").SetValue("Delivery Date");
-            ws.Cell("B5").SetValue(billInfo.BillDeliveryDate);
+            ws.Cell("A4").SetValue("Delivery Date");
+            ws.Cell("B4").SetValue(billInfo.BillDeliveryDate);
 
-            ws.Cell("A6").SetValue("BillNumber");
-            ws.Cell("B6").SetValue(billInfo.BillNumber);
+            ws.Cell("A5").SetValue("BillNumber");
+            ws.Cell("B5").SetValue(billInfo.BillNumber);
 
-            var table = ws.Cell("A8").InsertTable(exportContainerItems);
+            var table = ws.Cell("A7").InsertTable(exportContainerItems);
 
             table.ShowTotalsRow = true;
             table.Field(0).TotalsRowFunction = XLTotalsRowFunction.Sum;
