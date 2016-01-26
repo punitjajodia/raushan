@@ -192,7 +192,6 @@
     <Compile Include="Controllers\TmpImportFromExcelController.cs" />
     <Compile Include="Controllers\TmpDragDropController.cs" />
     <Compile Include="Controllers\ExportersController.cs" />
-    <Compile Include="Controllers\ExportToExcelController.cs" />
     <Compile Include="Controllers\FileUploadController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImportersController.cs" />
@@ -237,6 +236,14 @@
     <Compile Include="Migrations\201601242311362_RemovedImporterID.cs" />
     <Compile Include="Migrations\201601242311362_RemovedImporterID.Designer.cs">
       <DependentUpon>201601242311362_RemovedImporterID.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601250035308_MadeProductUnitString.cs" />
+    <Compile Include="Migrations\201601250035308_MadeProductUnitString.Designer.cs">
+      <DependentUpon>201601250035308_MadeProductUnitString.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601250125268_RenameBuyerNameToMarka.cs" />
+    <Compile Include="Migrations\201601250125268_RenameBuyerNameToMarka.Designer.cs">
+      <DependentUpon>201601250125268_RenameBuyerNameToMarka.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -879,7 +886,6 @@
     <Content Include="Views\ContainerItems\List.cshtml" />
     <Content Include="Views\Invoices\List.cshtml" />
     <Content Include="Views\Dashboard\List.cshtml" />
-    <Content Include="Views\FileUpload\Form.cshtml" />
     <Content Include="Views\Importers\Create.cshtml" />
     <Content Include="Views\Importers\Delete.cshtml" />
     <Content Include="Views\Importers\Details.cshtml" />
@@ -942,6 +948,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201601242311362_RemovedImporterID.resx">
       <DependentUpon>201601242311362_RemovedImporterID.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601250035308_MadeProductUnitString.resx">
+      <DependentUpon>201601250035308_MadeProductUnitString.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601250125268_RenameBuyerNameToMarka.resx">
+      <DependentUpon>201601250125268_RenameBuyerNameToMarka.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

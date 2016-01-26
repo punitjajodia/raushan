@@ -20,12 +20,12 @@ namespace HK.Controllers
                                     .GroupBy(a => new
                                     {
                                            a.PartyName,
-                                           a.BuyerName
+                                           a.Marka
                                     })
                                     .Select(group => new
                                     {
                                         Party = group.Key.PartyName,
-                                        Marka = group.Key.BuyerName,
+                                        Marka = group.Key.Marka,
                                         Cartons = group.Sum(i => i.Cartons)
                                     })
                                     .OrderBy(i => new

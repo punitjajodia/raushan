@@ -102,7 +102,7 @@ namespace HK.Controllers
             var dataObj = dataTable.DataRange.Rows()
                 .Select(packingList => new {
                     CartonNumber = packingList.Field("CartonNumber").GetString(),
-                    BuyerName = packingList.Field("BuyerName").GetString(),
+                    Marka = packingList.Field("Marka").GetString(),
                     PartyName = packingList.Field("PartyName").GetString(),
                     JobNumber = packingList.Field("JobNumber").GetString(),
                     PartyPhone = packingList.Field("PartyPhone").GetString(),
@@ -129,12 +129,12 @@ namespace HK.Controllers
                 var containerItem = new TmpContainerItem();
                 containerItem.ContainerID = CurrentContainerID;
                 containerItem.CartonNumber = item.CartonNumber;
-                containerItem.BuyerName = item.BuyerName;
+                containerItem.Marka = item.Marka;
 
                 var PartyData = String.IsNullOrEmpty(item.PartyName) ? 
                     db.TmpContainerItems
                     .Where(i =>
-                        i.BuyerName == item.BuyerName &&
+                        i.Marka == item.Marka &&
                         i.ContainerID == CurrentContainerID)
                     .Select(i => new
                         {
@@ -170,18 +170,61 @@ namespace HK.Controllers
 
                
                 containerItem.ProductBuyerName = item.ProductBuyerName;
-                containerItem.ProductUnit = (ProductUnit)Enum.Parse(typeof(ProductUnit), item.ProductUnit.TrimEnd('.'));
+                containerItem.ProductUnit = item.ProductUnit.TrimEnd('.');
 
                 containerItem.Quantity = Convert.ToDecimal(item.Quantity);
 
-                try
+                var cartonNumber = containerItem.CartonNumber;
+
+                if (String.IsNullOrEmpty(item.Cartons) || String.Equals(item.Cartons, "0"))
                 {
-                    containerItem.Cartons = Convert.ToInt32(item.Cartons);
+                    if (cartonNumber.Contains("-"))
+                    {
+                        var parts = cartonNumber.Split('-');
+                        try
+                        {
+                            var cartons = Convert.ToInt32(parts[1]) - Convert.ToInt32(parts[0]) + 1;
+                            containerItem.Cartons = cartons;
+                        }
+                        catch (Exception e)
+                        {
+                            containerItem.Cartons = 0;
+                        }
+
+                    }
+                    else
+                    {
+                        try
+                        {
+                            if (String.IsNullOrEmpty(containerItem.CartonNumber))
+                            {
+                                containerItem.Cartons = 0;
+                            }
+                            else
+                            {
+                                containerItem.Cartons = 1;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            containerItem.Cartons = 0;
+                        }
+                    }
                 }
-                catch (Exception e)
+                else
                 {
-                    containerItem.Cartons = 0;
+                    try
+                    {
+                        containerItem.Cartons = Convert.ToInt32(item.Cartons);
+                    }
+                    catch (Exception e)
+                    {
+                        containerItem.Cartons = 0;
+                    }
                 }
+
+                
+        
                 
                 containerItem.BuyerCurrency = item.BuyerCurrency;
 
@@ -189,7 +232,7 @@ namespace HK.Controllers
                     containerItem.BuyerUnitPrice = 
                                                  db.TmpContainerItems
                                                 .OrderByDescending(i => i.ContainerID)
-                                                .Where(i => i.PartyName == item.PartyName && i.ProductBuyerName == item.ProductBuyerName)
+                                                .Where(i => i.PartyName == item.PartyName && i.ProductBuyerName == item.ProductBuyerName && i.ProductUnit == item.ProductUnit)
                                                 .Select(i => i.BuyerUnitPrice)
                                                 .FirstOrDefault();
 
@@ -206,7 +249,6 @@ namespace HK.Controllers
                                                 .Where(i => i.ProductBuyerName == item.ProductBuyerName)
                                                 .Select(i => i.ProductCustomsName)
                                                 .FirstOrDefault();
-
                 }
                 else
                 {

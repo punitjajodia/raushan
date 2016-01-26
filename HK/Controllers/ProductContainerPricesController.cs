@@ -14,7 +14,6 @@ namespace HK.Controllers
 {
     public class ProductContainerPricesController : BaseController
     {
-        private ImportManagerContext db = new ImportManagerContext();
 
         // GET: ProductContainerPrices
         public async Task<ActionResult> Index()

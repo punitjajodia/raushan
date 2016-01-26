@@ -12,7 +12,7 @@ namespace HK.Models
         
         public string CartonNumber { get; set; }
         
-        public string BuyerName { get; set; }
+        public string Marka { get; set; }
 
         public string PartyName { get; set; }
         public string PartyPhone { get; set; }
@@ -26,7 +26,7 @@ namespace HK.Models
 
         public string ProductCustomsName { get; set; }
         public string ProductBuyerName { get; set; }
-        public ProductUnit ProductUnit { get; set; }
+        public string ProductUnit { get; set; }
 
         public decimal Quantity { get; set; }
 

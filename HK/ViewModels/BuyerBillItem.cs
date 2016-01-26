@@ -12,7 +12,7 @@ namespace HK.ViewModels
          public String Product {get; set;}
          public decimal Rate {get; set;}
          public decimal Quantity {get; set;}
-         public HK.Models.ProductUnit Unit { get; set; } 
+         public string Unit { get; set; } 
          public decimal Total { get; set; }
     }
 }

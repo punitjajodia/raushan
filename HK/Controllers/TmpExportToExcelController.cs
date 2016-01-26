@@ -185,7 +185,7 @@ namespace HK.Controllers
                                     .Where(a => a.ContainerID == CurrentContainerID)
                                     .Select(a => new
                                     {
-                                       a.BuyerName,
+                                       a.Marka,
                                        a.PartyName,
                                        a.PartyPhone,
                                        a.JobNumber,
@@ -226,7 +226,7 @@ namespace HK.Controllers
             
             foreach (PropertyInfo propertyInfo in container.GetType().GetProperties())
             {
-                if (!propertyInfo.PropertyType.IsGenericType && propertyInfo.PropertyType.IsSerializable)
+                if (!propertyInfo.PropertyType.IsGenericType && propertyInfo.PropertyType.IsSerializable && propertyInfo.Name.ToLower() != "containerid")
                 {
                     var prop = propertyInfo.GetValue(container);
 
@@ -234,14 +234,13 @@ namespace HK.Controllers
                     ws.Cell(row, 2).SetValue(prop);
                     row++;
                 }
-             
-             //   }
             }
 
             ws.Columns().AdjustToContents();
-            string filename = container.ContainerNumber + " - RAW";
+            string filename = container.ContainerNumber;
             Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             Response.AddHeader("content-disposition", "attachment;filename=\"" + filename + ".xlsx\"");
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
 
             // Flush the workbook to the Response.OutputStream
             using (MemoryStream memoryStream = new MemoryStream())
@@ -262,7 +261,7 @@ namespace HK.Controllers
                                     .Where(a => a.ContainerID == CurrentContainerID)
                                     .Select(a => new
                                     {
-                                        a.BuyerName,
+                                        a.Marka,
                                         a.CartonNumber,
                                         a.ProductBuyerName,
                                         a.Quantity,
@@ -308,7 +307,7 @@ namespace HK.Controllers
                                     .Where(a => a.ContainerID == CurrentContainerID)
                                     .Select(a => new
                                     {
-                                        a.BuyerName,
+                                        a.Marka,
                         
                                         a.CartonNumber,
                                         a.ProductCustomsName,

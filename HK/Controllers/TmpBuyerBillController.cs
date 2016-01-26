@@ -16,7 +16,7 @@ namespace HK.Controllers
         {
             var buyers = db.TmpContainerItems
                 .Where(t => t.ContainerID == CurrentContainerID)
-                .Select(t => t.BuyerName)
+                .Select(t => t.Marka)
                 .Distinct()
                 .ToList();
 
@@ -56,7 +56,7 @@ namespace HK.Controllers
             var exportContainerItems = containerItems
                 .Where(c => items.Contains(c.PartyName))
                 .GroupBy(c => new {
-                    c.BuyerName,
+                    c.Marka,
                     c.ProductBuyerName,
                     c.BuyerUnitPrice,
                     c.ProductUnit
@@ -64,14 +64,13 @@ namespace HK.Controllers
                 .Select(group => new 
                 {
                     Cartons = group.Sum(i => i.Cartons),
-                    Marka = group.Key.BuyerName,
+                    Marka = group.Key.Marka,
 
                     Product = group.Key.ProductBuyerName,
-                    
-                    Rate = group.Key.BuyerUnitPrice,
+             
                     Quantity = group.Sum(i => i.Quantity),
                     Unit = group.Key.ProductUnit,
-                    
+                    Rate = group.Key.BuyerUnitPrice,
                     Total = group.Key.BuyerUnitPrice * group.Sum(i => i.Quantity)
                 })
                 .ToList();
@@ -101,9 +100,10 @@ namespace HK.Controllers
             var table = ws.Cell("A8").InsertTable(exportContainerItems);
 
             table.ShowTotalsRow = true;
-            table.Field(5).TotalsRowFunction = XLTotalsRowFunction.Sum;
+            table.Field(0).TotalsRowFunction = XLTotalsRowFunction.Sum;
+            table.Field(6).TotalsRowFunction = XLTotalsRowFunction.Sum;
             ////// Just for fun let's add the text "Sum Of Income" to the totals row
-            table.Field(4).TotalsRowLabel = "Total";
+            table.Field(5).TotalsRowLabel = "Total";
 
             ws.Columns().AdjustToContents();
 
@@ -131,10 +131,10 @@ namespace HK.Controllers
             var containerItems = db.TmpContainerItems.Where(t => t.ContainerID == CurrentContainerID).ToList();
 
             var exportContainerItems = containerItems
-                .Where(c => items.Contains(c.BuyerName))
+                .Where(c => items.Contains(c.Marka))
                 .Select(c => new BuyerBillItem
                 {
-                    Marka = c.BuyerName,
+                    Marka = c.Marka,
                     Product = c.ProductBuyerName,
                     Rate = c.BuyerUnitPrice,
                     Quantity = c.Quantity,

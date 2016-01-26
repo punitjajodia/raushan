@@ -83,10 +83,7 @@ namespace HK.Controllers
             //    FileType = FileType.Excel
             //};
 
-            //string path = System.IO.Path.Combine(
-            //              Server.MapPath("~/Content/Uploads"), file.FileName);
-            //// file is uploaded
-            //upload.SaveAs(path);
+           
 
             //Remove all items of current container
             DeleteAllContainerItems();
