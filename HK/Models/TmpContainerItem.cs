@@ -34,8 +34,11 @@ namespace HK.Models
         public Container Container { get; set; }
 
         public string BuyerCurrency { get; set; }
-        public decimal BuyerUnitPrice { get; set; }	
-        public string CustomsCurrency { get; set; }	
+        public decimal BuyerUnitPrice { get; set; }
+
+        public string CustomsProductUnit { get; set; }
+        public decimal CustomsQuantity { get; set; }
+        public string CustomsCurrency { get; set; }
         public decimal CustomsUnitPrice { get; set;}
 
         public TmpContainerItem()

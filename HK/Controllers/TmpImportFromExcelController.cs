@@ -119,6 +119,8 @@ namespace HK.Controllers
                     Cartons = packingList.Field("Cartons").GetString(),
                     BuyerCurrency = packingList.Field("BuyerCurrency").GetString(),
                     BuyerUnitPrice	= packingList.Field("BuyerUnitPrice").GetString(),
+                    CustomsQuantity = packingList.Field("CustomsQuantity").GetString(),
+                    CustomsProductUnit = packingList.Field("CustomsProductUnit").GetString(),
                     CustomsCurrency = packingList.Field("CustomsCurrency").GetString(),
                     CustomsUnitPrice = packingList.Field("CustomsUnitPrice").GetString()
                 })
@@ -254,6 +256,53 @@ namespace HK.Controllers
                 {
                     containerItem.ProductCustomsName = item.ProductCustomsName;
                 }
+
+                if (String.IsNullOrEmpty(item.CustomsProductUnit))
+                {
+                    containerItem.CustomsProductUnit =
+                                                 db.TmpContainerItems
+                                                .OrderByDescending(i => i.ContainerID)
+                                                .Where(i => i.ProductCustomsName == item.ProductCustomsName)
+                                                .Select(i => i.CustomsProductUnit)
+                                                .FirstOrDefault();
+                }
+                else
+                {
+                    containerItem.CustomsProductUnit = item.CustomsProductUnit;
+                }
+
+
+                //Populate CustomsQuantity automatically
+                if (String.IsNullOrEmpty(item.CustomsQuantity))
+                {
+                    if (String.IsNullOrEmpty(item.Quantity))
+                    {
+                        containerItem.CustomsQuantity =
+                                                 db.TmpContainerItems
+                                                .OrderByDescending(i => i.ContainerID)
+                                                .Where(i => i.ProductBuyerName == item.ProductBuyerName)
+                                                .Select(i => i.CustomsQuantity)
+                                                .FirstOrDefault();
+                    }
+                    else
+                    {
+                        if (containerItem.ProductUnit == "PCS" && containerItem.CustomsProductUnit == "DOZ")
+                        {
+                            containerItem.CustomsQuantity = containerItem.Quantity / 12;
+                        }
+                        else
+                        {
+                            containerItem.CustomsQuantity = containerItem.Quantity;
+                        }
+                    }
+                    
+                }
+                else
+                {
+                    containerItem.CustomsQuantity = Convert.ToDecimal(item.CustomsQuantity);
+                }
+
+
 
                 if (String.IsNullOrEmpty(item.CustomsCurrency))
                 {

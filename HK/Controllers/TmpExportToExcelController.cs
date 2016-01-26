@@ -203,6 +203,8 @@ namespace HK.Controllers
                                        a.BuyerCurrency,
                                        a.BuyerUnitPrice,
                                        a.ProductCustomsName,
+                                       a.CustomsQuantity,
+                                       a.CustomsProductUnit,
                                        a.CustomsCurrency,
                                        a.CustomsUnitPrice
                                     });

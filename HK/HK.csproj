@@ -245,6 +245,14 @@
     <Compile Include="Migrations\201601250125268_RenameBuyerNameToMarka.Designer.cs">
       <DependentUpon>201601250125268_RenameBuyerNameToMarka.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201601260303232_AddCustomsProductUnit.cs" />
+    <Compile Include="Migrations\201601260303232_AddCustomsProductUnit.Designer.cs">
+      <DependentUpon>201601260303232_AddCustomsProductUnit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201601260314172_AddCustomsQuantity.cs" />
+    <Compile Include="Migrations\201601260314172_AddCustomsQuantity.Designer.cs">
+      <DependentUpon>201601260314172_AddCustomsQuantity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Buyer.cs" />
@@ -954,6 +962,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201601250125268_RenameBuyerNameToMarka.resx">
       <DependentUpon>201601250125268_RenameBuyerNameToMarka.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601260303232_AddCustomsProductUnit.resx">
+      <DependentUpon>201601260303232_AddCustomsProductUnit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601260314172_AddCustomsQuantity.resx">
+      <DependentUpon>201601260314172_AddCustomsQuantity.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
