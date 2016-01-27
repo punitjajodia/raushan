@@ -2,6 +2,7 @@
 using HK.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
@@ -31,6 +32,7 @@ namespace HK.Controllers
         [HttpPost]
         public ActionResult Upload(HttpPostedFileBase upload)
         {
+
             if (!ModelState.IsValid)
             {
                 return View("Error");
@@ -105,7 +107,6 @@ namespace HK.Controllers
                     Marka = packingList.Field("Marka").GetString(),
                     PartyName = packingList.Field("PartyName").GetString(),
                     JobNumber = packingList.Field("JobNumber").GetString(),
-                    PartyPhone = packingList.Field("PartyPhone").GetString(),
                     BillOnBoardingDate = packingList.Field("BillOnBoardingDate").GetString(),
                     BillDeliveryDate = packingList.Field("BillDeliveryDate").GetString(),
                     BillNumber = packingList.Field("BillNumber").GetString(),
@@ -283,7 +284,7 @@ namespace HK.Controllers
                     }
                     else
                     {
-                        if (containerItem.ProductUnit == "PCS" && containerItem.CustomsProductUnit == "DOZ")
+                        if ((containerItem.ProductUnit == "PCS" || containerItem.ProductUnit == "PRS") && containerItem.CustomsProductUnit == "DOZ")
                         {
                             containerItem.CustomsQuantity = containerItem.Quantity / 12;
                         }

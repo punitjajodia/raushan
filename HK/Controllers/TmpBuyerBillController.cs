@@ -2,6 +2,7 @@
 using HK.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -35,9 +36,9 @@ namespace HK.Controllers
 
         }
 
-        public void Create()
+        public ActionResult Create()
         {
-
+            var container = db.Containers.Find(CurrentContainerID);
             var items = String.IsNullOrEmpty(Request.QueryString["party"]) ? new List<String>() : Request.QueryString["party"].Split(',').ToList();
 
             var containerItems = db.TmpContainerItems.Where(t => t.ContainerID == CurrentContainerID).ToList();
@@ -104,20 +105,27 @@ namespace HK.Controllers
 
             ws.Columns().AdjustToContents();
 
-            string filename = "Bill";
 
-            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            Response.AddHeader("content-disposition", "attachment;filename=\"" + filename + ".xlsx\"");
+            var filename = ConfigurationManager.AppSettings["StorageDrive"] + container.ContainerNumber + "/bill/" + "/bill-" + Request.QueryString["party"].Replace(',', '_') + "-" + container.ContainerNumber + ".xlsx";
 
-            // Flush the workbook to the Response.OutputStream
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                wb.SaveAs(memoryStream);
-                memoryStream.WriteTo(Response.OutputStream);
-                memoryStream.Close();
-            }
+            wb.SaveAs(filename);
 
-            Response.End();
+            return View("Success", (object)filename);
+
+            //string filename = "Bill";
+
+            //Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            //Response.AddHeader("content-disposition", "attachment;filename=\"" + filename + ".xlsx\"");
+
+            //// Flush the workbook to the Response.OutputStream
+            //using (MemoryStream memoryStream = new MemoryStream())
+            //{
+            //    wb.SaveAs(memoryStream);
+            //    memoryStream.WriteTo(Response.OutputStream);
+            //    memoryStream.Close();
+            //}
+
+            //Response.End();
         }
 
         public void Export()

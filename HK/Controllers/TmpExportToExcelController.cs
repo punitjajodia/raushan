@@ -3,6 +3,7 @@ using HK.Models;
 using HK.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -98,6 +99,84 @@ namespace HK.Controllers
             return View();
         }
 
+        public void AddContainerInfoForPerforma(IXLWorksheet ws, Container container)
+        {
+            ws.Cell("A1").SetValue(container.ExporterName).Style.Font.FontSize = 20;
+            ws.Range("A1:E1").Merge();
+
+            //  ws.Cell("A2").SetValue(container.Exporter.ExporterAddress).Style.Alignment.WrapText = true;
+            ws.Range("A2:B3").Merge();
+
+            ws.Cell("A5").SetValue("Shipped Per");
+            ws.Cell("B5").SetValue("");
+            ws.Range("B5:C5").Merge();
+
+            ws.Cell("A6").SetValue("On/About");
+            ws.Cell("B6").SetValue("");
+            ws.Range("B6:C6").Merge();
+
+            ws.Cell("A7").SetValue("From");
+            ws.Cell("B7").SetValue(container.From);
+            // ws.Row(7)
+            //  .Style
+            //   .Alignment.SetVertical(XLAlignmentVerticalValues.Top)
+            //   .Alignment.SetWrapText(true);
+            ws.Range("B7:C7").Merge();
+            ws.Row(7).Height = 70;
+
+            ws.Cell("A8").SetValue("Airway Bill No. \nor B/L No.");
+            ws.Cell("B8").SetValue("");
+            ws.Range("B8:C8").Merge();
+
+            ws.Row(8).Height = 30;
+            // ws.Row(8).Style.Alignment.SetWrapText(true);
+
+            ws.Cell("A9").SetValue("Letter of\nCredit No.");
+            ws.Cell("B9").SetValue(container.LetterOfCreditNumber);
+            ws.Range("B9:C9").Merge();
+            ws.Row(9).Height = 30;
+            ws.Cell("A10").SetValue("Drawn Under");
+            ws.Cell("B10").SetValue(container.DrawnUnder)
+                .Style
+                    .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+            //         .Alignment.SetWrapText(true);
+            ws.Range("B10:C10").Merge();
+            ws.Row(10).Height = 70;
+            //   ws.Row(10).Style.Alignment.SetVertical(XLAlignmentVerticalValues.Top);
+
+            ws.Range("A1:A10").Style.Font.Bold = true;
+            ws.Range("B5:C10").Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+            //    ws.Range("B5:C10").Style.Alignment.WrapText = true;
+
+            ws.Rows("5:10").Style.Alignment.SetWrapText(true)
+                .Alignment.SetVertical(XLAlignmentVerticalValues.Top);
+
+            //Importer
+            ws.Cell("E5").SetValue(container.ImporterName +
+                                        "\n" + container.ImporterAddress +
+                                        "\n" + "(TAX CERTIFICATE NO. " + container.ImporterTaxCertificateNumber + ")")
+                                        .Style
+                                            .Alignment.SetVertical(XLAlignmentVerticalValues.Top)
+                                            .Alignment.SetWrapText();
+
+
+
+            ws.Range("E5:H10").Merge().Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
+
+            //Container Number + Container Date
+            ws.Cell("F2").SetValue("PERFORMA INVOICE NO:");
+            ws.Cell("G2").SetValue(container.ContainerNumber);
+
+            ws.Cell("F3").SetValue("DATE:");
+            ws.Cell("G3").SetValue(container.Date);
+
+            ws.Range("F2:F3").Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Right;
+            ws.Range("G2:H2").Merge();
+            ws.Range("G3:H3").Merge();
+            ws.Range("G2:G3").Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Left;
+            ws.Range("F2:H3").Style.Font.Bold = true;
+        }
+
         public void AddContainerInfo(IXLWorksheet ws, Container container)
         {
             ws.Cell("A1").SetValue(container.ExporterName).Style.Font.FontSize = 20;
@@ -177,7 +256,7 @@ namespace HK.Controllers
 
         }
 
-        public void ExportContainer()
+        public ActionResult ExportContainer()
         {
             var container = db.Containers.Find(CurrentContainerID);
 
@@ -238,23 +317,29 @@ namespace HK.Controllers
             }
 
             ws.Columns().AdjustToContents();
-            string filename = container.ContainerNumber;
-            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            Response.AddHeader("content-disposition", "attachment;filename=\"" + filename + ".xlsx\"");
-            Response.Cache.SetCacheability(HttpCacheability.NoCache);
 
-            // Flush the workbook to the Response.OutputStream
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                wb.SaveAs(memoryStream);
-                memoryStream.WriteTo(Response.OutputStream);
-                memoryStream.Close();
-            }
+            var filename = ConfigurationManager.AppSettings["StorageDrive"] + container.ContainerNumber + "/dataexcel" + "/dataexcel-" + container.ContainerNumber + ".xlsx";
 
-            Response.End();
+            wb.SaveAs(filename);
+
+            return View("Success", (object)filename);
+            //string filename = container.ContainerNumber;
+            //Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            //Response.AddHeader("content-disposition", "attachment;filename=\"" + filename + ".xlsx\"");
+            //Response.Cache.SetCacheability(HttpCacheability.NoCache);
+
+            //// Flush the workbook to the Response.OutputStream
+            //using (MemoryStream memoryStream = new MemoryStream())
+            //{
+            //    wb.SaveAs(memoryStream);
+            //    memoryStream.WriteTo(Response.OutputStream);
+            //    memoryStream.Close();
+            //}
+
+            //Response.End();
         }
 
-        public void BuyerNamePackingList()
+        public ActionResult BuyerNamePackingList()
         {
             var container = db.Containers.Find(CurrentContainerID);
 
@@ -284,23 +369,32 @@ namespace HK.Controllers
 
             ws.Columns().AdjustToContents();
 
-            string filename = container.ContainerNumber + " - Packing List";
-            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            Response.AddHeader("content-disposition", "attachment;filename=\"" + filename + ".xlsx\"");
+
+            var filename = ConfigurationManager.AppSettings["StorageDrive"] + container.ContainerNumber + "/packinglist" + "/packinglist-" + container.ContainerNumber + ".xlsx";
+
+            wb.SaveAs(filename);
+
+            return View("Success", (object)filename);
+
+            //string filename = container.ContainerNumber + " - Packing List";
+            //Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            //Response.AddHeader("content-disposition", "attachment;filename=\"" + filename + ".xlsx\"");
 
 
-            // Flush the workbook to the Response.OutputStream
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                wb.SaveAs(memoryStream);
-                memoryStream.WriteTo(Response.OutputStream);
-                memoryStream.Close();
-            }
+            //// Flush the workbook to the Response.OutputStream
+            //using (MemoryStream memoryStream = new MemoryStream())
+            //{
+            //    wb.SaveAs(memoryStream);
+            //    memoryStream.WriteTo(Response.OutputStream);
+            //    memoryStream.Close();
+            //}
 
-            Response.End();
+            //Response.End();
         }
 
-        public void CustomsNamePackingList()
+        
+
+        public ActionResult CustomsNamePackingList()
         {
             var container = db.Containers.Find(CurrentContainerID);
 
@@ -368,20 +462,27 @@ namespace HK.Controllers
 
             ws.Columns().AdjustToContents();
 
-            string filename = container.ContainerNumber + " - Customs Packing List";
 
-            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            Response.AddHeader("content-disposition", "attachment;filename=\"" + filename + ".xlsx\"");
+            var filename = ConfigurationManager.AppSettings["StorageDrive"] + container.ContainerNumber + "/customsinvoice" + "/customsinvoice-" + container.ContainerNumber + ".xlsx";
 
-            // Flush the workbook to the Response.OutputStream
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                wb.SaveAs(memoryStream);
-                memoryStream.WriteTo(Response.OutputStream);
-                memoryStream.Close();
-            }
+            wb.SaveAs(filename);
 
-            Response.End();
+            return View("Success", (object)filename);
+
+            //string filename = container.ContainerNumber + " - Customs Packing List";
+
+            //Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            //Response.AddHeader("content-disposition", "attachment;filename=\"" + filename + ".xlsx\"");
+
+            //// Flush the workbook to the Response.OutputStream
+            //using (MemoryStream memoryStream = new MemoryStream())
+            //{
+            //    wb.SaveAs(memoryStream);
+            //    memoryStream.WriteTo(Response.OutputStream);
+            //    memoryStream.Close();
+            //}
+
+            //Response.End();
         }
 
         public void ExpandDescription(IXLWorksheet ws, IXLRow row)
@@ -389,7 +490,7 @@ namespace HK.Controllers
             ws.Range(row.Cell((int)CustomsInvoiceHeaders.Description), row.Cell((int)CustomsInvoiceHeaders.Amount)).Merge();
         }
 
-        public void CustomsNameInvoice()
+        public ActionResult CustomsNameInvoice()
         {
             var container = db.Containers.Find(CurrentContainerID);
 
@@ -569,20 +670,229 @@ namespace HK.Controllers
 
             ws.Columns().AdjustToContents();
 
-            string filename = container.ContainerNumber + " - Customs Invoice";
 
-            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            Response.AddHeader("content-disposition", "attachment;filename=\"" + filename + ".xlsx\"");
+            var filename = ConfigurationManager.AppSettings["StorageDrive"] + container.ContainerNumber + "/customsinvoice" + "/customsinvoice-" + container.ContainerNumber + ".xlsx";
 
-            // Flush the workbook to the Response.OutputStream
-            using (MemoryStream memoryStream = new MemoryStream())
+            wb.SaveAs(filename);
+
+            return View("Success", (object)filename);
+
+            //string filename = container.ContainerNumber + " - Customs Invoice";
+
+            //Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            //Response.AddHeader("content-disposition", "attachment;filename=\"" + filename + ".xlsx\"");
+
+            //// Flush the workbook to the Response.OutputStream
+            //using (MemoryStream memoryStream = new MemoryStream())
+            //{
+            //    wb.SaveAs(memoryStream);
+            //    memoryStream.WriteTo(Response.OutputStream);
+            //    memoryStream.Close();
+            //}
+
+            //Response.End();
+        }
+
+        public ActionResult PerformaInvoice()
+        {
+            var container = db.Containers.Find(CurrentContainerID);
+
+            var containerItems = db.TmpContainerItems
+                                    .Where(a => a.ContainerID == CurrentContainerID)
+                                    .GroupBy(a => new { a.ProductCustomsName, a.CustomsProductUnit, a.CustomsUnitPrice, a.CustomsCurrency })
+                                    .OrderBy(a => a.Key.ProductCustomsName)
+                                    .AsEnumerable()
+                                    .Select((group, inc) => new
+                                    {
+                                        SN = (inc + 1),
+                                        ProductCustomsName = group.Key.ProductCustomsName,
+                                        Quantity = group.Sum(b => b.CustomsQuantity),
+                                        Unit = group.Key.CustomsProductUnit,
+                                        UnitPriceCurrency = group.Key.CustomsCurrency,
+                                        Rate = group.Key.CustomsUnitPrice,
+                                        AmountCurrency = group.Key.CustomsCurrency,
+                                        Amount = group.Sum(b => b.CustomsQuantity) * group.Key.CustomsUnitPrice
+                                    });
+
+            XLWorkbook wb = new XLWorkbook();
+
+            wb.PageOptions.Margins.SetTop(0.5).SetRight(0.5).SetBottom(0.5).SetLeft(0.5);
+            var ws = wb.Worksheets.Add("Packing List");
+
+
+            ws.Style.Font.SetFontName("Times New Roman");
+            ws.Style.Font.SetFontSize(10.0);
+            AddContainerInfoForPerforma(ws, container);
+
+
+            var currentRow = ws.LastRowUsed().RowBelow().RowBelow();
+
+            var headerRow = currentRow;
+
+            headerRow.Cell((int)CustomsInvoiceHeaders.SN).SetValue("SN");
+            headerRow.Cell((int)CustomsInvoiceHeaders.Description).SetValue("Description");
+
+            ws.Range(headerRow.Cell((int)CustomsInvoiceHeaders.Quantity), headerRow.Cell((int)CustomsInvoiceHeaders.ProductUnit)).Merge();
+            headerRow.Cell((int)CustomsInvoiceHeaders.Quantity).SetValue("Quantity");
+
+            ws.Range(headerRow.Cell((int)CustomsInvoiceHeaders.UnitPriceCurrency), headerRow.Cell((int)CustomsInvoiceHeaders.UnitPrice)).Merge();
+            headerRow.Cell((int)CustomsInvoiceHeaders.UnitPriceCurrency).SetValue("Unit Price");
+
+            ws.Range(headerRow.Cell((int)CustomsInvoiceHeaders.AmountCurrency), headerRow.Cell((int)CustomsInvoiceHeaders.Amount)).Merge();
+            headerRow.Cell((int)CustomsInvoiceHeaders.AmountCurrency).SetValue("Amount");
+
+
+            ws.Range(headerRow.FirstCell(), headerRow.Cell((int)CustomsInvoiceHeaders.Amount))
+                .Style.Font.SetBold()
+                .Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
+                .Border.SetOutsideBorder(XLBorderStyleValues.Thin);
+
+            currentRow = currentRow.RowBelow().RowBelow();
+
+
+
+            currentRow.Cell((int)CustomsInvoiceHeaders.Description).SetValue("FOOTWEARS (HARMONIC CODE \nNO. 6400.00.00)")
+                                            .Style.Font.SetBold()
+                                            .Alignment.SetVertical(XLAlignmentVerticalValues.Center)
+                                            .Alignment.SetWrapText();
+
+            ws.Range(currentRow.Cell((int)CustomsInvoiceHeaders.Description), currentRow.RowBelow().Cell((int)CustomsInvoiceHeaders.Description)).Merge();
+
+
+            currentRow.Cell((int)CustomsInvoiceHeaders.AmountCurrency).SetValue("CNF CALCUTTA SEA PORT, INDIA").Style.Font.SetBold()
+                                            .Alignment.SetVertical(XLAlignmentVerticalValues.Center)
+                                            .Alignment.SetWrapText();
+            ws.Range(currentRow.Cell((int)CustomsInvoiceHeaders.AmountCurrency), currentRow.RowBelow().Cell((int)CustomsInvoiceHeaders.Amount)).Merge();
+
+            currentRow = currentRow.RowBelow().RowBelow().RowBelow();
+
+            currentRow.FirstCell().Value = containerItems.AsEnumerable();
+
+            var dataRange = ws.Range(headerRow.FirstCell(), ws.LastCellUsed());
+
+            dataRange.Column((int)CustomsInvoiceHeaders.Amount).Style.NumberFormat.Format = "0.00";
+            dataRange.Column((int)CustomsInvoiceHeaders.UnitPrice).Style.NumberFormat.Format = "0.00";
+
+            dataRange.Columns(String.Join(",",
+                            new String[] {
+                               Convert.ToString((int)CustomsInvoiceHeaders.SN),
+                               Convert.ToString((int)CustomsInvoiceHeaders.Description),
+                               Convert.ToString((int)CustomsInvoiceHeaders.ProductUnit),
+                               Convert.ToString((int)CustomsInvoiceHeaders.UnitPrice),
+                               Convert.ToString((int)CustomsInvoiceHeaders.Amount)
+                            }))
+                .Style.Border.SetRightBorder(XLBorderStyleValues.Thin);
+
+            dataRange.FirstColumn().Style.Border.SetLeftBorder(XLBorderStyleValues.Thin);
+
+            ws.Range(ws.LastRowUsed().FirstCellUsed(), ws.LastRowUsed().LastCellUsed())
+                .Style.Border.SetBottomBorder(XLBorderStyleValues.Thin);
+
+            currentRow = ws.LastRowUsed().RowBelow();
+
+            var totalAmount = containerItems.Sum(a => a.Amount);
+            currentRow.Cell((int)CustomsInvoiceHeaders.Amount).SetValue(totalAmount);
+            currentRow.Cell((int)CustomsInvoiceHeaders.Amount).Style.NumberFormat.Format = "0.00";
+
+            currentRow.Cell((int)CustomsInvoiceHeaders.AmountCurrency).SetValue("Total").Style.Font.SetBold();
+
+            currentRow = currentRow.RowBelow().RowBelow();
+
+            var inWords = containerItems.First().AmountCurrency;
+            inWords += " " + NumberToText((int)containerItems.Sum(a => a.Amount), false);
+
+            if (DecimalPartOfDecimal(totalAmount) > 0)
             {
-                wb.SaveAs(memoryStream);
-                memoryStream.WriteTo(Response.OutputStream);
-                memoryStream.Close();
+                inWords = inWords + " and " + DecimalPartOfDecimal(totalAmount) + "/100";
             }
 
-            Response.End();
+            inWords += " only";
+
+            currentRow.Cell((int)CustomsInvoiceHeaders.Description).SetValue(inWords.ToUpper());
+
+            ExpandDescription(ws, currentRow);
+
+            if (!String.IsNullOrWhiteSpace(container.TotalGrossWeight))
+            {
+                currentRow = currentRow.RowBelow();
+                currentRow.Cell((int)CustomsInvoiceHeaders.Description).SetValue(String.Concat("TOTAL GW: ", container.TotalGrossWeight));
+                ExpandDescription(ws, currentRow);
+            }
+
+            if (!String.IsNullOrWhiteSpace(container.TotalCartons))
+            {
+                currentRow = currentRow.RowBelow();
+                currentRow.Cell((int)CustomsInvoiceHeaders.Description).SetValue(String.Concat("TOTAL CTN: ", container.TotalCartons));
+                ExpandDescription(ws, currentRow);
+            }
+
+            if (!String.IsNullOrWhiteSpace(container.CountryOfOrigin))
+            {
+                currentRow = currentRow.RowBelow();
+                currentRow.Cell((int)CustomsInvoiceHeaders.Description).SetValue(String.Concat("COUNTRY OF ORIGIN: ", container.CountryOfOrigin));
+                ExpandDescription(ws, currentRow);
+            }
+
+            if (!String.IsNullOrWhiteSpace(container.ImporterTaxCertificateNumber))
+            {
+                currentRow = currentRow.RowBelow();
+                currentRow.Cell((int)CustomsInvoiceHeaders.Description).SetValue(String.Concat("WE HEREBY CERTIFYING THAT SHOWING EXACT QUANTITY SHIPPED APPLICANT's TAX CERTIFICATE NO.", container.ImporterTaxCertificateNumber));
+                ExpandDescription(ws, currentRow);
+            }
+
+            currentRow = currentRow.RowBelow();
+            currentRow.Cell((int)CustomsInvoiceHeaders.Description).SetValue("BANK INFORMATION").Style.Font.SetBold().Font.SetUnderline();
+
+
+            if (!String.IsNullOrWhiteSpace(container.BeneficiaryBank))
+            {
+                currentRow = currentRow.RowBelow();
+                currentRow.Cell((int)CustomsInvoiceHeaders.Description).SetValue(String.Concat("BENEFICIARY BANK: ", container.BeneficiaryBank));
+                ExpandDescription(ws, currentRow);
+            }
+
+            if (!String.IsNullOrWhiteSpace(container.BeneficiaryBank))
+            {
+                currentRow = currentRow.RowBelow();
+                currentRow.Cell((int)CustomsInvoiceHeaders.Description).SetValue(String.Concat("BENEFICIARY: ", container.ExporterName));
+                ExpandDescription(ws, currentRow);
+            }
+
+            if (!String.IsNullOrWhiteSpace(container.BeneficiarySwift))
+            {
+                currentRow = currentRow.RowBelow();
+                currentRow.Cell((int)CustomsInvoiceHeaders.Description).SetValue(String.Concat("SWIFT: ", container.BeneficiarySwift));
+                ExpandDescription(ws, currentRow);
+            }
+
+            if (!String.IsNullOrWhiteSpace(container.BeneficiaryUsdAccount))
+            {
+                currentRow = currentRow.RowBelow();
+                currentRow.Cell((int)CustomsInvoiceHeaders.Description).SetValue(String.Concat("USD ACCOUNT NO.: ", container.BeneficiaryUsdAccount));
+                ExpandDescription(ws, currentRow);
+            }
+
+            ws.Columns().AdjustToContents();
+
+            string saveLocation = ConfigurationManager.AppSettings["StorageDrive"] + container.ContainerNumber + "/performa" + "/performa-" + container.ContainerNumber + ".xlsx";
+
+            wb.SaveAs(saveLocation);
+
+            return View("Success", (object)saveLocation);
+            //string filename = container.ContainerNumber + " - Customs Invoice";
+
+            //Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            //Response.AddHeader("content-disposition", "attachment;filename=\"" + filename + ".xlsx\"");
+
+            //// Flush the workbook to the Response.OutputStream
+            //using (MemoryStream memoryStream = new MemoryStream())
+            //{
+            //    wb.SaveAs(memoryStream);
+            //    memoryStream.WriteTo(Response.OutputStream);
+            //    memoryStream.Close();
+            //}
+
+            //Response.End();
         }
 
 
@@ -592,42 +902,48 @@ namespace HK.Controllers
 
         //}
 
-        public ActionResult ExportInvoice()
-        {
-            var container = new TmpContainersController().GetCurrentContainer();
-            var invoices = new InvoicesController().GetInvoices(container).Select(i => new InvoiceItemExportVM(i));
+        //public ActionResult ExportInvoice()
+        //{
+        //    var container = new TmpContainersController().GetCurrentContainer();
+        //    var invoices = new InvoicesController().GetInvoices(container).Select(i => new InvoiceItemExportVM(i));
 
-            XLWorkbook wb = new XLWorkbook();
-            var ws = wb.Worksheets.Add("Invoice");
+        //    XLWorkbook wb = new XLWorkbook();
+        //    var ws = wb.Worksheets.Add("Invoice");
 
-            AddContainerInfo(ws, container);
+        //    AddContainerInfo(ws, container);
 
 
-            var table = ws.Cell("A12").InsertTable(invoices);
+        //    var table = ws.Cell("A12").InsertTable(invoices);
 
-            table.ShowTotalsRow = true;
-            table.Field(4).TotalsRowFunction = XLTotalsRowFunction.Sum;
-            //// Just for fun let's add the text "Sum Of Income" to the totals row
-            table.Field(3).TotalsRowLabel = "Total";
+        //    table.ShowTotalsRow = true;
+        //    table.Field(4).TotalsRowFunction = XLTotalsRowFunction.Sum;
+        //    //// Just for fun let's add the text "Sum Of Income" to the totals row
+        //    table.Field(3).TotalsRowLabel = "Total";
 
-            ws.Columns().AdjustToContents();
+        //    ws.Columns().AdjustToContents();
 
-            string filename = container.ContainerNumber;
+        //    string filename = ConfigurationManager.AppSettings["StorageDrive"] + container.ContainerNumber + "/performa" + "/performa-" + container.ContainerNumber + ".xlsx";
 
-            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            Response.AddHeader("content-disposition", "attachment;filename=\"" + filename + ".xlsx\"");
+        //    wb.SaveAs(filename);
 
-            // Flush the workbook to the Response.OutputStream
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                wb.SaveAs(memoryStream);
-                memoryStream.WriteTo(Response.OutputStream);
-                memoryStream.Close();
-            }
+        //    return View("Success", (object)filename);
 
-            Response.End();
-            return RedirectToAction("Index");
-        }
+        //    //string filename = container.ContainerNumber;
+
+        //    //Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        //    //Response.AddHeader("content-disposition", "attachment;filename=\"" + filename + ".xlsx\"");
+
+        //    //// Flush the workbook to the Response.OutputStream
+        //    //using (MemoryStream memoryStream = new MemoryStream())
+        //    //{
+        //    //    wb.SaveAs(memoryStream);
+        //    //    memoryStream.WriteTo(Response.OutputStream);
+        //    //    memoryStream.Close();
+        //    //}
+
+        //    //Response.End();
+        //    //return RedirectToAction("Index");
+        //}
 
 
         public void BuyerBill(List<BuyerBillItem> buyerBillItems)

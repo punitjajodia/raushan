@@ -839,6 +839,7 @@
     <Content Include="Views\TmpBuyerBill\Index.cshtml" />
     <Content Include="Views\TmpBuyerBill\Export.cshtml" />
     <Content Include="Views\TmpBuyerBill\SelectParty.cshtml" />
+    <Content Include="Views\Shared\Success.cshtml" />
     <None Include="Views\TmpDragDrop\Index.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -928,6 +929,7 @@
     <Folder Include="Views\Base\" />
     <Folder Include="Views\ExportToExcel\" />
     <Folder Include="Views\TmpDelivery\" />
+    <Folder Include="Views\TmpExportToExcel\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

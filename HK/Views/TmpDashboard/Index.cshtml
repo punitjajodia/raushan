@@ -4,23 +4,17 @@
 
 @Html.ActionLink("New Container", "CreateNew", "TmpContainers", null, new { @class = "btn btn-danger", id = "CreateContainer" })
 
+<div class="space20" />
+
+@Html.Action("Upload", "TmpImportFromExcel")
+
 <div class="form-horizontal" id="CreateEditContainer">
     @Html.Action("EditContainer", "TmpContainers")
     @*  @Html.Partial("~/Views/Containers/Edit.cshtml", Model.Container)*@
 </div>
 
-<div class="space40" />
-    @Html.ActionLink("Import Template", "PackingListImportTemplateExcel", "TmpImportFromExcel", null, new { @class = "menu-item" })
-    @Html.ActionLink("Export", "ExportContainer", "TmpExportToExcel", null, new { @class = "menu-item" })
-    @Html.ActionLink("Buyer Packing List", "BuyerNamePackingList", "TmpExportToExcel", null, new { @class = "menu-item" })
 
-    @Html.ActionLink("Customs Packing List", "CustomsNamePackingList", "TmpExportToExcel", null, new { @class = "menu-item" })
 
-    @Html.ActionLink("Customs Invoice", "CustomsNameInvoice", "TmpExportToExcel", null, new { @class = "menu-item" })
-
-<div class="space20" />
-
-    @Html.Action("Upload", "TmpImportFromExcel")
 
 
 @Html.Action("Index", "TmpContainerItems")
