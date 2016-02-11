@@ -132,46 +132,20 @@ namespace HK.Controllers
                 containerItem.ContainerID = CurrentContainerID;
                 containerItem.CartonNumber = item.CartonNumber;
                 containerItem.Marka = item.Marka;
-
-                var PartyData = String.IsNullOrEmpty(item.PartyName) ? 
-                    db.TmpContainerItems
-                    .Where(i =>
-                        i.Marka == item.Marka &&
-                        i.ContainerID == CurrentContainerID)
-                    .Select(i => new
-                        {
-                            i.PartyName,
-                            i.JobNumber,
-                            i.BillOnBoardingDate,
-                            i.BillDeliveryDate,
-                            i.BillNumber,
-                            i.BillTTDAPNumber,
-                            i.BillTTDAPDate,
-                            i.LotSize
-                        }).FirstOrDefault() : new {
-                            item.PartyName,
-                            item.JobNumber,
-                            item.BillOnBoardingDate,
-                            item.BillDeliveryDate,
-                            item.BillNumber,
-                            item.BillTTDAPNumber,
-                            item.BillTTDAPDate,
-                            item.LotSize
-                        };
-
-                containerItem.PartyName = PartyData.PartyName;
-                containerItem.JobNumber = PartyData.JobNumber;
-                containerItem.BillOnBoardingDate = PartyData.BillOnBoardingDate;
-                containerItem.BillDeliveryDate = PartyData.BillDeliveryDate;
-                containerItem.BillNumber = PartyData.BillNumber;
-                containerItem.BillTTDAPDate = PartyData.BillTTDAPDate;
-                containerItem.BillTTDAPNumber = PartyData.BillTTDAPNumber;
-
-               
+         
                 containerItem.ProductBuyerName = item.ProductBuyerName;
                 containerItem.ProductUnit = item.ProductUnit.TrimEnd('.');
 
                 containerItem.Quantity = Convert.ToDecimal(item.Quantity);
+
+                containerItem.PartyName = item.PartyName;
+                containerItem.JobNumber = item.JobNumber;
+                containerItem.LotSize = item.LotSize;
+                containerItem.BillOnBoardingDate = item.BillOnBoardingDate;
+                containerItem.BillDeliveryDate = item.BillDeliveryDate;
+                containerItem.BillNumber = item.BillNumber;
+                containerItem.BillTTDAPDate = item.BillTTDAPDate;
+                containerItem.BillTTDAPNumber = item.BillTTDAPNumber;
 
                 var cartonNumber = containerItem.CartonNumber;
 
@@ -333,6 +307,72 @@ namespace HK.Controllers
                 db.TmpContainerItems.Add(containerItem);
                 db.SaveChanges();
             }
+
+            var MarkaPartyInfo = db.TmpContainerItems
+                                    .Where(c => c.ContainerID == CurrentContainerID)
+                                    .GroupBy(c => new
+                                    {
+                                        c.Marka
+                                    })
+                                    .Select(group =>
+                                       new
+                                       {
+                                           Marka = group.Key.Marka,
+                                           PartyName = group.FirstOrDefault(a => a.PartyName != "").PartyName,
+                                           JobNumber = group.FirstOrDefault(a => a.JobNumber != "").JobNumber,
+                                           LotSize = group.FirstOrDefault(a => a.LotSize != "").LotSize,
+                                           BillOnBoardingDate = group.FirstOrDefault(a => a.BillOnBoardingDate != "").BillOnBoardingDate,
+                                           BillDeliveryDate = group.FirstOrDefault(a => a.BillDeliveryDate != "").BillDeliveryDate,
+                                           BillTTDAPDate = group.FirstOrDefault(a => a.BillTTDAPDate != "").BillTTDAPDate,
+                                           BillTTDAPNumber = group.FirstOrDefault(a => a.BillTTDAPNumber != "").BillTTDAPNumber
+                                       }
+                                    ).ToDictionary(a => a.Marka);
+
+
+            db.TmpContainerItems
+                .Where(c => c.ContainerID == CurrentContainerID)
+                .ToList()
+                .ForEach(a => {
+                    a.PartyName = MarkaPartyInfo[a.Marka].PartyName;
+                    a.JobNumber = MarkaPartyInfo[a.Marka].JobNumber;
+                    a.LotSize = MarkaPartyInfo[a.Marka].LotSize;
+                    a.BillOnBoardingDate = MarkaPartyInfo[a.Marka].BillOnBoardingDate;
+                    a.BillDeliveryDate = MarkaPartyInfo[a.Marka].BillDeliveryDate;
+                    a.BillTTDAPDate = MarkaPartyInfo[a.Marka].BillTTDAPDate;
+                    a.BillTTDAPNumber = MarkaPartyInfo[a.Marka].BillTTDAPNumber;
+                });
+
+            db.SaveChanges();
+
+
+            var CustomsInfo = db.TmpContainerItems
+                                .Where(c => c.ContainerID == CurrentContainerID)
+                                .GroupBy(c => new
+                                {
+                                    c.ProductBuyerName
+                                })
+                                .Select(group =>
+                                    new {
+                                        group.Key.ProductBuyerName,
+                                        group.FirstOrDefault(a => a.ProductCustomsName != "").ProductCustomsName,
+                                        group.FirstOrDefault(a => a.CustomsProductUnit != "").CustomsProductUnit,
+                                        group.FirstOrDefault(a => a.CustomsCurrency != "").CustomsCurrency,
+                                        group.FirstOrDefault(a => a.CustomsUnitPrice != 0).CustomsUnitPrice
+                                }).ToDictionary(a => a.ProductBuyerName);
+
+
+            db.TmpContainerItems
+               .Where(c => c.ContainerID == CurrentContainerID)
+               .ToList()
+               .ForEach(a =>
+               {
+                   a.ProductCustomsName = CustomsInfo[a.ProductBuyerName].ProductCustomsName;
+                   a.CustomsProductUnit = CustomsInfo[a.ProductBuyerName].CustomsProductUnit;
+                   a.CustomsCurrency = CustomsInfo[a.ProductBuyerName].CustomsCurrency;
+                   a.CustomsUnitPrice = CustomsInfo[a.ProductBuyerName].CustomsUnitPrice;
+               });
+
+            db.SaveChanges();
 
             return new RedirectResult(Url.Action("Index", "TmpDashboard"));
         }
