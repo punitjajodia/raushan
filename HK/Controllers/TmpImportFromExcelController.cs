@@ -60,8 +60,7 @@ namespace HK.Controllers
 
             try
             {
-                var containerWS = wb.Worksheets.Last();
-
+                var containerWS = wb.Worksheet("Container");
                 var containerRow = containerWS.FirstRowUsed();
                 var container = new Container();
                 while (!containerRow.IsEmpty())
@@ -92,7 +91,7 @@ namespace HK.Controllers
             DeleteAllContainerItems();
 
 
-            var ws = wb.Worksheets.First();
+            var ws = wb.Worksheet("Items");
 
             var dataRange = ws.RangeUsed();
 
@@ -234,7 +233,7 @@ namespace HK.Controllers
                                                 .OrderByDescending(i => i.ContainerID)
                                                 .Where(i => i.PartyName == item.PartyName && i.ProductBuyerName == item.ProductBuyerName && i.ProductUnit == item.ProductUnit)
                                                 .Select(i => i.BuyerUnitPrice)
-                                                .FirstOrDefault();
+                                                .LastOrDefault();
 
                 }
                 else {
@@ -248,7 +247,7 @@ namespace HK.Controllers
                                                 .OrderByDescending(i => i.ContainerID)
                                                 .Where(i => i.ProductBuyerName == item.ProductBuyerName)
                                                 .Select(i => i.ProductCustomsName)
-                                                .FirstOrDefault();
+                                                .LastOrDefault();
                 }
                 else
                 {
@@ -262,7 +261,7 @@ namespace HK.Controllers
                                                 .OrderByDescending(i => i.ContainerID)
                                                 .Where(i => i.ProductCustomsName == item.ProductCustomsName)
                                                 .Select(i => i.CustomsProductUnit)
-                                                .FirstOrDefault();
+                                                .LastOrDefault();
                 }
                 else
                 {
@@ -280,7 +279,7 @@ namespace HK.Controllers
                                                 .OrderByDescending(i => i.ContainerID)
                                                 .Where(i => i.ProductBuyerName == item.ProductBuyerName)
                                                 .Select(i => i.CustomsQuantity)
-                                                .FirstOrDefault();
+                                                .LastOrDefault();
                     }
                     else
                     {
@@ -309,7 +308,7 @@ namespace HK.Controllers
                                                 .OrderByDescending(i => i.ContainerID)
                                                 .Where(i => i.ProductBuyerName == item.ProductBuyerName)
                                                 .Select(i => i.CustomsCurrency)
-                                                .FirstOrDefault();
+                                                .LastOrDefault();
 
                 }
                 else
@@ -322,16 +321,15 @@ namespace HK.Controllers
                     containerItem.CustomsUnitPrice =
                                                  db.TmpContainerItems
                                                 .OrderByDescending(i => i.ContainerID)
-                                                .Where(i => i.ProductBuyerName == item.ProductBuyerName)
+                                                .Where(i => i.ProductCustomsName == item.ProductCustomsName)
                                                 .Select(i => i.CustomsUnitPrice)
-                                                .FirstOrDefault();
+                                                .LastOrDefault();
                 }
                 else
                 {
                     containerItem.CustomsUnitPrice = Convert.ToDecimal(item.CustomsUnitPrice);
                 }
                 
-
                 db.TmpContainerItems.Add(containerItem);
                 db.SaveChanges();
             }

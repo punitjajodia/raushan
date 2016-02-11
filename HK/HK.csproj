@@ -257,6 +257,10 @@
     <Compile Include="Migrations\201601260342423_RemovePartyPhone.Designer.cs">
       <DependentUpon>201601260342423_RemovePartyPhone.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201601272217563_AddPerformaAndCustomsInvoiceNumber.cs" />
+    <Compile Include="Migrations\201601272217563_AddPerformaAndCustomsInvoiceNumber.Designer.cs">
+      <DependentUpon>201601272217563_AddPerformaAndCustomsInvoiceNumber.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Buyer.cs" />
@@ -977,6 +981,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201601260342423_RemovePartyPhone.resx">
       <DependentUpon>201601260342423_RemovePartyPhone.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201601272217563_AddPerformaAndCustomsInvoiceNumber.resx">
+      <DependentUpon>201601272217563_AddPerformaAndCustomsInvoiceNumber.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

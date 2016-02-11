@@ -11,6 +11,10 @@ namespace HK.Models
     {
         public int ContainerID { get; set; }
         public string ContainerNumber { get; set; }
+
+        public string PerformaInvoiceNumber { get; set; }
+        public string CustomsInvoiceNumber { get; set; }
+
         public DateTime Date { get; set; }
 
         [DisplayName("Shipped Per")]

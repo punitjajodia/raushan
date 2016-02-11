@@ -99,6 +99,47 @@ namespace HK.Controllers
             return View();
         }
 
+        public ActionResult RawInvoice()
+        {
+            var container = db.Containers.Find(CurrentContainerID);
+
+            var containerItems = db.TmpContainerItems
+                                    .Where(a => a.ContainerID == CurrentContainerID)
+                                    .GroupBy(a => new
+                                    {
+                                        a.ProductBuyerName,
+                                        a.ProductUnit
+                                    })
+                                    .Select(group => new
+                                    {
+                                        Product = group.Key.ProductBuyerName,
+                                        Quantity = group.Sum(b => b.Quantity),
+                                        Unit = group.Key.ProductUnit
+                                    });
+
+            XLWorkbook wb = new XLWorkbook();
+            var ws = wb.Worksheets.Add("Items");
+
+            var table = ws.Cell("A1").InsertTable(containerItems);
+
+            //table.ShowTotalsRow = true;
+            //table.Field(4).TotalsRowFunction = XLTotalsRowFunction.Sum;
+            ////// Just for fun let's add the text "Sum Of Income" to the totals row
+            //table.Field(3).TotalsRowLabel = "Total Cartons";
+
+            ws.Columns().AdjustToContents();
+
+            ws = wb.Worksheets.Add("RAW-INVOICE");
+
+            ws.Columns().AdjustToContents();
+
+            var filename = ConfigurationManager.AppSettings["StorageDrive"] + container.ContainerNumber + "/rawinvoice" + "/rawinvoice-" + container.ContainerNumber + ".xlsx";
+
+            wb.SaveAs(filename);
+
+            return View("Success", (object)filename);
+        }
+
         public void AddContainerInfoForPerforma(IXLWorksheet ws, Container container)
         {
             ws.Cell("A1").SetValue(container.ExporterName).Style.Font.FontSize = 20;
@@ -165,7 +206,7 @@ namespace HK.Controllers
 
             //Container Number + Container Date
             ws.Cell("F2").SetValue("PERFORMA INVOICE NO:");
-            ws.Cell("G2").SetValue(container.ContainerNumber);
+            ws.Cell("G2").SetValue(container.PerformaInvoiceNumber);
 
             ws.Cell("F3").SetValue("DATE:");
             ws.Cell("G3").SetValue(container.Date);
@@ -242,8 +283,8 @@ namespace HK.Controllers
             ws.Range("E5:H10").Merge().Style.Border.OutsideBorder = XLBorderStyleValues.Medium;
 
             //Container Number + Container Date
-            ws.Cell("F2").SetValue("NO:");
-            ws.Cell("G2").SetValue(container.ContainerNumber);
+            ws.Cell("F2").SetValue("INVOICE NO:");
+            ws.Cell("G2").SetValue(container.CustomsInvoiceNumber);
        
             ws.Cell("F3").SetValue("DATE:");
             ws.Cell("G3").SetValue(container.Date);
@@ -548,7 +589,7 @@ namespace HK.Controllers
 
 
 
-            currentRow.Cell((int)CustomsInvoiceHeaders.Description).SetValue("FOOTWEARS (HARMONIC CODE \nNO. 6400.00.00)")
+            currentRow.Cell((int)CustomsInvoiceHeaders.Description).SetValue(container.HarmonicCodes)
                                             .Style.Font.SetBold()
                                             .Alignment.SetVertical(XLAlignmentVerticalValues.Center)
                                             .Alignment.SetWrapText();
@@ -556,7 +597,7 @@ namespace HK.Controllers
             ws.Range(currentRow.Cell((int)CustomsInvoiceHeaders.Description), currentRow.RowBelow().Cell((int)CustomsInvoiceHeaders.Description)).Merge();
             
             
-            currentRow.Cell((int)CustomsInvoiceHeaders.AmountCurrency).SetValue("CNF CALCUTTA SEA PORT, INDIA").Style.Font.SetBold()
+            currentRow.Cell((int)CustomsInvoiceHeaders.AmountCurrency).SetValue(container.CostsIncluded).Style.Font.SetBold()
                                             .Alignment.SetVertical(XLAlignmentVerticalValues.Center)
                                             .Alignment.SetWrapText();
             ws.Range(currentRow.Cell((int)CustomsInvoiceHeaders.AmountCurrency), currentRow.RowBelow().Cell((int)CustomsInvoiceHeaders.Amount)).Merge();
