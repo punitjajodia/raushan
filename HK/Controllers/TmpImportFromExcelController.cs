@@ -148,55 +148,30 @@ namespace HK.Controllers
                 containerItem.BillTTDAPNumber = item.BillTTDAPNumber;
 
                 var cartonNumber = containerItem.CartonNumber;
-
+                
                 if (String.IsNullOrEmpty(item.Cartons) || String.Equals(item.Cartons, "0"))
                 {
-                    if (cartonNumber.Contains("-"))
-                    {
-                        var parts = cartonNumber.Split('-');
-                        try
-                        {
-                            var cartons = Convert.ToInt32(parts[1]) - Convert.ToInt32(parts[0]) + 1;
-                            containerItem.Cartons = cartons;
-                        }
-                        catch (Exception e)
-                        {
-                            containerItem.Cartons = 0;
-                        }
+                    int total = 0;
+                    var parts = item.CartonNumber.Split(',');
 
-                    }
-                    else
-                    {
-                        try
+                    foreach(string part in parts){
+                        var combo = part.Split('-');
+                        if (combo.Count() == 1)
                         {
-                            if (String.IsNullOrEmpty(containerItem.CartonNumber))
-                            {
-                                containerItem.Cartons = 0;
-                            }
-                            else
-                            {
-                                containerItem.Cartons = 1;
-                            }
+                            total += 1;
                         }
-                        catch (Exception e)
-                        {
-                            containerItem.Cartons = 0;
+                        else {
+                            total += Convert.ToInt32(combo[1]) - Convert.ToInt32(combo[0]) + 1;
                         }
                     }
+                    containerItem.Cartons = total;
                 }
-                else
+
+                if (db.TmpContainerItems.Where(c => c.ContainerID == CurrentContainerID)
+                        .Any(c => c.CartonNumber == item.CartonNumber && c.Marka == item.Marka))
                 {
-                    try
-                    {
-                        containerItem.Cartons = Convert.ToInt32(item.Cartons);
-                    }
-                    catch (Exception e)
-                    {
-                        containerItem.Cartons = 0;
-                    }
+                    containerItem.Cartons = 0;
                 }
-
-                
         
                 
                 containerItem.BuyerCurrency = item.BuyerCurrency;
@@ -207,7 +182,7 @@ namespace HK.Controllers
                                                 .OrderByDescending(i => i.ContainerID)
                                                 .Where(i => i.PartyName == item.PartyName && i.ProductBuyerName == item.ProductBuyerName && i.ProductUnit == item.ProductUnit)
                                                 .Select(i => i.BuyerUnitPrice)
-                                                .LastOrDefault();
+                                                .FirstOrDefault();
 
                 }
                 else {
@@ -221,7 +196,7 @@ namespace HK.Controllers
                                                 .OrderByDescending(i => i.ContainerID)
                                                 .Where(i => i.ProductBuyerName == item.ProductBuyerName)
                                                 .Select(i => i.ProductCustomsName)
-                                                .LastOrDefault();
+                                                .FirstOrDefault();
                 }
                 else
                 {
@@ -235,7 +210,7 @@ namespace HK.Controllers
                                                 .OrderByDescending(i => i.ContainerID)
                                                 .Where(i => i.ProductCustomsName == item.ProductCustomsName)
                                                 .Select(i => i.CustomsProductUnit)
-                                                .LastOrDefault();
+                                                .FirstOrDefault();
                 }
                 else
                 {
@@ -253,7 +228,7 @@ namespace HK.Controllers
                                                 .OrderByDescending(i => i.ContainerID)
                                                 .Where(i => i.ProductBuyerName == item.ProductBuyerName)
                                                 .Select(i => i.CustomsQuantity)
-                                                .LastOrDefault();
+                                                .FirstOrDefault();
                     }
                     else
                     {
@@ -282,7 +257,7 @@ namespace HK.Controllers
                                                 .OrderByDescending(i => i.ContainerID)
                                                 .Where(i => i.ProductBuyerName == item.ProductBuyerName)
                                                 .Select(i => i.CustomsCurrency)
-                                                .LastOrDefault();
+                                                .FirstOrDefault();
 
                 }
                 else
@@ -297,7 +272,7 @@ namespace HK.Controllers
                                                 .OrderByDescending(i => i.ContainerID)
                                                 .Where(i => i.ProductCustomsName == item.ProductCustomsName)
                                                 .Select(i => i.CustomsUnitPrice)
-                                                .LastOrDefault();
+                                                .FirstOrDefault();
                 }
                 else
                 {

@@ -382,15 +382,26 @@ namespace HK.Controllers
         }
 
 
+        class PackingListItem
+        {
+            public string Marka { get; set; }
+            public string CartonNumber { get; set; }
+            public string Description { get; set; }
+            public decimal Quantity { get; set; }
+            public string Unit { get; set; }
+            public int Cartons { get; set; }
+        }
 
 
         public ActionResult BuyerNamePackingList()
         {
             var container = db.Containers.Find(CurrentContainerID);
 
-            var containerItems = db.TmpContainerItems
+            var ci = db.TmpContainerItems
                                     .Where(a => a.ContainerID == CurrentContainerID)
-                                    .Select(a => new
+                                  .ToList();
+            
+            var containerItems = ci.Select(a => new PackingListItem
                                     {
                                         Marka = a.Marka,
                                         CartonNumber = a.CartonNumber,
@@ -398,11 +409,26 @@ namespace HK.Controllers
                                         Quantity = a.Quantity,
                                         Unit = a.ProductUnit,
                                         Cartons = a.Cartons
-                                    }).ToList();
-            
-            containerItems = containerItems.OrderBy(a => a.Marka)
+                                    }).OrderBy(a => a.Marka)
                                     .ThenBy(a => a.CartonNumber.Split('-')[0].Length)
-                                    .ThenBy(a => a.CartonNumber.Split('-')[0]).ToList();
+                                    .ThenBy(a => a.CartonNumber.Split('-')[0])
+                                    .ToList();
+
+            string prevCartonNumber = containerItems[0].CartonNumber;
+
+            for (int i = 1, size = containerItems.Count(); i < size; i++)
+            {
+                    var currCartonNumber = containerItems[i].CartonNumber;
+
+                    if (currCartonNumber == prevCartonNumber)
+                    {
+                        containerItems[i].CartonNumber = "";
+                    }
+                    else
+                    {
+                        prevCartonNumber = currCartonNumber;
+                    }   
+            }
 
             XLWorkbook wb = new XLWorkbook();
             var ws = wb.Worksheets.Add("Packing List");
