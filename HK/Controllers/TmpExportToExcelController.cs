@@ -7,6 +7,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 
@@ -223,7 +224,7 @@ namespace HK.Controllers
             ws.Cell("A1").SetValue(container.ExporterName).Style.Font.FontSize = 20;
             ws.Range("A1:E1").Merge();
 
-          //  ws.Cell("A2").SetValue(container.Exporter.ExporterAddress).Style.Alignment.WrapText = true;
+            ws.Cell("A2").SetValue(container.ExporterAddress).Style.Alignment.WrapText = true;
             ws.Range("A2:B3").Merge();
 
             ws.Cell("A5").SetValue("Shipped Per");
@@ -380,6 +381,9 @@ namespace HK.Controllers
             //Response.End();
         }
 
+
+
+
         public ActionResult BuyerNamePackingList()
         {
             var container = db.Containers.Find(CurrentContainerID);
@@ -388,12 +392,17 @@ namespace HK.Controllers
                                     .Where(a => a.ContainerID == CurrentContainerID)
                                     .Select(a => new
                                     {
-                                        a.Marka,
-                                        a.CartonNumber,
-                                        a.ProductBuyerName,
-                                        a.Quantity,
-                                        a.ProductUnit
-                                    });
+                                        Marka = a.Marka,
+                                        CartonNumber = a.CartonNumber,
+                                        Description = a.ProductBuyerName,
+                                        Quantity = a.Quantity,
+                                        Unit = a.ProductUnit,
+                                        Cartons = a.Cartons
+                                    }).ToList();
+            
+            containerItems = containerItems.OrderBy(a => a.Marka)
+                                    .ThenBy(a => a.CartonNumber.Split('-')[0].Length)
+                                    .ThenBy(a => a.CartonNumber.Split('-')[0]).ToList();
 
             XLWorkbook wb = new XLWorkbook();
             var ws = wb.Worksheets.Add("Packing List");
@@ -403,10 +412,10 @@ namespace HK.Controllers
 
             var table = ws.Cell("A12").InsertTable(containerItems);
 
-            //table.ShowTotalsRow = true;
-            //table.Field(4).TotalsRowFunction = XLTotalsRowFunction.Sum;
-            ////// Just for fun let's add the text "Sum Of Income" to the totals row
-            //table.Field(3).TotalsRowLabel = "Total Cartons";
+            table.ShowTotalsRow = true;
+            table.Field(5).TotalsRowFunction = XLTotalsRowFunction.Sum;
+            //// Just for fun let's add the text "Sum Of Income" to the totals row
+            table.Field(4).TotalsRowLabel = "Total Cartons";
 
             ws.Columns().AdjustToContents();
 
