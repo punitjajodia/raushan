@@ -36,16 +36,18 @@ namespace HK.Controllers
 
         }
 
-        public ActionResult Create()
+        public ActionResult CreatePartyWise(string parties)
         {
             var container = db.Containers.Find(CurrentContainerID);
-            var items = String.IsNullOrEmpty(Request.QueryString["party"]) ? new List<String>() : Request.QueryString["party"].Split(',').ToList();
+            var items = String.IsNullOrEmpty(parties) ? new List<String>() : parties.Split(',').ToList();
 
             var containerItems = db.TmpContainerItems.Where(t => t.ContainerID == CurrentContainerID).ToList();
 
+            
             var billInfo = containerItems
                  .Where(c => items.Contains(c.PartyName))
-                 .Select(c => new {
+                 .Select(c => new
+                 {
                      c.PartyName,
                      c.JobNumber,
                      c.BillOnBoardingDate,
@@ -55,31 +57,36 @@ namespace HK.Controllers
 
             var exportContainerItems = containerItems
                 .Where(c => items.Contains(c.PartyName))
-                .GroupBy(c => new {
+                .GroupBy(c => new
+                {
                     c.Marka,
+                    c.PartyName,
                     c.ProductBuyerName,
                     c.BuyerUnitPrice,
                     c.ProductUnit
                 })
-                .Select(group => new 
+                .Select(group => new
                 {
                     Cartons = group.Sum(i => i.Cartons),
                     Marka = group.Key.Marka,
-
+                    PartyName = group.Key.PartyName,
                     Product = group.Key.ProductBuyerName,
-             
+
                     Quantity = group.Sum(i => i.Quantity),
                     Unit = group.Key.ProductUnit,
-                    Rate = group.Key.BuyerUnitPrice,
+                    Rate = group.Key.BuyerUnitPrice != 0 ? group.Key.BuyerUnitPrice.ToString() : "",
                     Total = group.Key.BuyerUnitPrice * group.Sum(i => i.Quantity)
                 })
+                .OrderBy(c => c.PartyName)
+                .ThenBy(c => c.Marka)
+                .ThenBy(c => c.Product)
                 .ToList();
 
 
             XLWorkbook wb = new XLWorkbook();
             var ws = wb.Worksheets.Add("Bill");
 
-        
+
             ws.Cell("A1").SetValue("Job No.");
             ws.Cell("B1").SetValue(billInfo.JobNumber);
             ws.Cell("A2").SetValue("Party Name");
@@ -111,6 +118,88 @@ namespace HK.Controllers
             wb.SaveAs(filename);
 
             return View("Success", (object)filename);
+        }
+
+        public ActionResult All()
+        {
+            var container = db.Containers.Find(CurrentContainerID);
+
+            var containerItems = db.TmpContainerItems.Where(t => t.ContainerID == CurrentContainerID).ToList();
+
+
+            var billInfo = containerItems
+                 .Select(c => new
+                 {
+                     c.PartyName,
+                     c.JobNumber,
+                     c.BillOnBoardingDate,
+                     c.BillDeliveryDate,
+                     c.BillNumber
+                 }).FirstOrDefault();
+
+            var exportContainerItems = containerItems
+                .GroupBy(c => new
+                {
+                    c.Marka,
+                    c.PartyName,
+                    c.ProductBuyerName,
+                    c.BuyerUnitPrice,
+                    c.ProductUnit
+                })
+                .Select(group => new
+                {
+                    Cartons = group.Sum(i => i.Cartons),
+                    Marka = group.Key.Marka,
+                    PartyName = group.Key.PartyName,
+                    Product = group.Key.ProductBuyerName,
+
+                    Quantity = group.Sum(i => i.Quantity),
+                    Unit = group.Key.ProductUnit,
+                    Rate = group.Key.BuyerUnitPrice != 0 ? group.Key.BuyerUnitPrice.ToString() : "",
+                    Total = group.Key.BuyerUnitPrice * group.Sum(i => i.Quantity)
+                })
+                .OrderBy(c => c.PartyName)
+                .ThenBy(c => c.Marka)
+                .ThenBy(c => c.Product)
+                .ToList();
+
+
+            XLWorkbook wb = new XLWorkbook();
+            var ws = wb.Worksheets.Add("Bill");
+
+            ws.Cell("A1").SetValue(container.ImporterName).Style.Font.SetBold();
+            ws.Cell("A2").SetValue(container.LetterOfCreditNumber).Style.Font.SetBold();
+            ws.Cell("A3").SetValue(containerItems.Sum(c => c.Cartons) + " CTNS").Style.Font.SetBold();
+
+            var table = ws.Cell("A5").InsertTable(exportContainerItems);
+
+            table.ShowTotalsRow = true;
+            table.Field(0).TotalsRowFunction = XLTotalsRowFunction.Sum;
+            table.Field(6).TotalsRowFunction = XLTotalsRowFunction.Sum;
+            ////// Just for fun let's add the text "Sum Of Income" to the totals row
+            table.Field(5).TotalsRowLabel = "Total";
+
+            ws.Columns().AdjustToContents();
+
+
+            var filename = ConfigurationManager.AppSettings["StorageDrive"] + container.ContainerNumber + "/bill/" + "/allpartybill-" + "-" + container.ContainerNumber + ".xlsx";
+
+            try
+            {
+                wb.SaveAs(filename);
+            }
+            catch (IOException e)
+            {
+                return View("InvalidExcel", (object)("Please close excel file before saving " + e.Message));
+            }
+         
+
+            return View("Success", (object)filename);
+        }
+
+        public ActionResult Create()
+        {
+            return CreatePartyWise(Request.QueryString["party"]);
 
             //string filename = "Bill";
 

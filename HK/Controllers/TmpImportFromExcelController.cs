@@ -12,6 +12,13 @@ using System.Web.Mvc;
 
 namespace HK.Controllers
 {
+
+    public class InvalidCartonNumberException : FormatException
+    {
+
+    }
+
+
     public class TmpImportFromExcelController : BaseController
     {
         public PartialViewResult Upload()
@@ -27,6 +34,49 @@ namespace HK.Controllers
         public void DeleteAllContainerItems()
         {
             db.TmpContainerItems.RemoveRange(db.TmpContainerItems.Where(c => c.ContainerID == CurrentContainerID));
+            db.SaveChanges();
+        }
+
+
+        public int CartonsFromCartonNumber(string cartonNumber)
+        {
+            if (cartonNumber.EndsWith("CTN"))
+            {
+                cartonNumber = cartonNumber.Substring(0, cartonNumber.LastIndexOf("CTN")).Trim();
+                return Convert.ToInt32(cartonNumber);
+            }
+
+            if (cartonNumber.EndsWith("CTNS"))
+            {
+                cartonNumber = cartonNumber.Substring(0, cartonNumber.LastIndexOf("CTNS")).Trim();
+                return Convert.ToInt32(cartonNumber);
+            }
+
+            int total = 0;
+            var parts = cartonNumber.Split(',');
+
+            try
+            {
+                foreach (string part in parts)
+                {
+                    var combo = part.Split('-');
+                    if (combo.Count() == 1)
+                    {
+                        total += 1;
+                    }
+                    else
+                    {
+                        total += Convert.ToInt32(combo[1]) - Convert.ToInt32(combo[0]) + 1;
+                    }
+                }
+            }
+            catch (FormatException e)
+            {
+                throw new FormatException("Carton number " + cartonNumber + " format is incorrect");
+            }
+            
+           
+            return total;
         }
 
         [HttpPost]
@@ -55,6 +105,8 @@ namespace HK.Controllers
             //upload.SaveAs(path);
 
             //Remove all items of current container
+
+
 
             var wb = new XLWorkbook(upload.InputStream);
 
@@ -85,7 +137,7 @@ namespace HK.Controllers
             }
             catch (Exception e)
             {
-                throw e;
+                return View("InvalidExcel", (object)("Something wrong with container information<br/>" + e.Message));
             }
 
             DeleteAllContainerItems();
@@ -96,35 +148,40 @@ namespace HK.Controllers
             var dataRange = ws.RangeUsed();
 
             // Treat the range as a table (to be able to use the column names)
+
             var dataTable = dataRange.AsTable();
 
-
+                var dataObj = dataTable.DataRange.Rows()
+              .Select(packingList => new
+              {
+                  CartonNumber = packingList.Field("CartonNumber").GetString(),
+                  Marka = packingList.Field("Marka").GetString(),
+                  PartyName = packingList.Field("PartyName").GetString(),
+                  JobNumber = packingList.Field("JobNumber").GetString(),
+                  BillOnBoardingDate = packingList.Field("BillOnBoardingDate").GetString(),
+                  BillDeliveryDate = packingList.Field("BillDeliveryDate").GetString(),
+                  BillNumber = packingList.Field("BillNumber").GetString(),
+                  BillTTDAPNumber = packingList.Field("BillTTDAPNumber").GetString(),
+                  BillTTDAPDate = packingList.Field("BillTTDAPDate").GetString(),
+                  LotSize = packingList.Field("LotSize").GetString(),
+                  ProductCustomsName = packingList.Field("ProductCustomsName").GetString(),
+                  ProductBuyerName = packingList.Field("ProductBuyerName").GetString(),
+                  ProductUnit = packingList.Field("ProductUnit").GetString(),
+                  Quantity = packingList.Field("Quantity").GetString(),
+                  Cartons = packingList.Field("Cartons").GetString(),
+                  BuyerCurrency = packingList.Field("BuyerCurrency").GetString(),
+                  BuyerUnitPrice = packingList.Field("BuyerUnitPrice").GetString(),
+                  CustomsQuantity = packingList.Field("CustomsQuantity").GetString(),
+                  CustomsProductUnit = packingList.Field("CustomsProductUnit").GetString(),
+                  CustomsCurrency = packingList.Field("CustomsCurrency").GetString(),
+                  CustomsUnitPrice = packingList.Field("CustomsUnitPrice").GetString()
+              })
+              .ToList();
+            
+               
+           
             // Get the list of company names
-            var dataObj = dataTable.DataRange.Rows()
-                .Select(packingList => new {
-                    CartonNumber = packingList.Field("CartonNumber").GetString(),
-                    Marka = packingList.Field("Marka").GetString(),
-                    PartyName = packingList.Field("PartyName").GetString(),
-                    JobNumber = packingList.Field("JobNumber").GetString(),
-                    BillOnBoardingDate = packingList.Field("BillOnBoardingDate").GetString(),
-                    BillDeliveryDate = packingList.Field("BillDeliveryDate").GetString(),
-                    BillNumber = packingList.Field("BillNumber").GetString(),
-                    BillTTDAPNumber = packingList.Field("BillTTDAPNumber").GetString(),
-                    BillTTDAPDate = packingList.Field("BillTTDAPDate").GetString(),
-                    LotSize = packingList.Field("LotSize").GetString(),
-                    ProductCustomsName = packingList.Field("ProductCustomsName").GetString(),
-                    ProductBuyerName = packingList.Field("ProductBuyerName").GetString(),
-                    ProductUnit = packingList.Field("ProductUnit").GetString(),
-                    Quantity = packingList.Field("Quantity").GetString(),
-                    Cartons = packingList.Field("Cartons").GetString(),
-                    BuyerCurrency = packingList.Field("BuyerCurrency").GetString(),
-                    BuyerUnitPrice	= packingList.Field("BuyerUnitPrice").GetString(),
-                    CustomsQuantity = packingList.Field("CustomsQuantity").GetString(),
-                    CustomsProductUnit = packingList.Field("CustomsProductUnit").GetString(),
-                    CustomsCurrency = packingList.Field("CustomsCurrency").GetString(),
-                    CustomsUnitPrice = packingList.Field("CustomsUnitPrice").GetString()
-                })
-                .ToList();
+           
 
             foreach (var item in dataObj)
             {
@@ -148,32 +205,23 @@ namespace HK.Controllers
                 containerItem.BillTTDAPNumber = item.BillTTDAPNumber;
 
                 var cartonNumber = containerItem.CartonNumber;
-                
-                if (String.IsNullOrEmpty(item.Cartons) || String.Equals(item.Cartons, "0"))
-                {
-                    int total = 0;
-                    var parts = item.CartonNumber.Split(',');
 
-                    foreach(string part in parts){
-                        var combo = part.Split('-');
-                        if (combo.Count() == 1)
-                        {
-                            total += 1;
-                        }
-                        else {
-                            total += Convert.ToInt32(combo[1]) - Convert.ToInt32(combo[0]) + 1;
-                        }
-                    }
-                    containerItem.Cartons = total;
+                try
+                {
+                    containerItem.Cartons = CartonsFromCartonNumber(cartonNumber); 
+                }
+                catch (FormatException e)
+                {
+                    return View("InvalidExcel", (object)e.Message);
                 }
 
-                if (db.TmpContainerItems.Where(c => c.ContainerID == CurrentContainerID)
-                        .Any(c => c.CartonNumber == item.CartonNumber && c.Marka == item.Marka))
+
+                if (!containerItem.CartonNumber.Contains("CTN") && db.TmpContainerItems
+                        .Any(c => c.ContainerID == CurrentContainerID && c.CartonNumber == item.CartonNumber && c.Marka == item.Marka))
                 {
                     containerItem.Cartons = 0;
                 }
-        
-                
+      
                 containerItem.BuyerCurrency = item.BuyerCurrency;
 
                 if(String.IsNullOrEmpty(item.BuyerUnitPrice)){
@@ -210,6 +258,7 @@ namespace HK.Controllers
                                                 .OrderByDescending(i => i.ContainerID)
                                                 .Where(i => i.ProductCustomsName == item.ProductCustomsName)
                                                 .Select(i => i.CustomsProductUnit)
+                                                .DefaultIfEmpty("")
                                                 .FirstOrDefault();
                 }
                 else
@@ -232,7 +281,7 @@ namespace HK.Controllers
                     }
                     else
                     {
-                        if ((containerItem.ProductUnit == "PCS" || containerItem.ProductUnit == "PRS") && containerItem.CustomsProductUnit == "DOZ")
+                        if ((containerItem.ProductUnit.Trim().Equals("PCS") || containerItem.ProductUnit.Trim().Equals("PRS")) && containerItem.CustomsProductUnit.Trim().Equals("DOZ"))
                         {
                             containerItem.CustomsQuantity = containerItem.Quantity / 12;
                         }
@@ -304,48 +353,46 @@ namespace HK.Controllers
                                     ).ToDictionary(a => a.Marka);
 
 
-            db.TmpContainerItems
-                .Where(c => c.ContainerID == CurrentContainerID)
-                .ToList()
-                .ForEach(a => {
-                    a.PartyName = MarkaPartyInfo[a.Marka].PartyName;
-                    a.JobNumber = MarkaPartyInfo[a.Marka].JobNumber;
-                    a.LotSize = MarkaPartyInfo[a.Marka].LotSize;
-                    a.BillOnBoardingDate = MarkaPartyInfo[a.Marka].BillOnBoardingDate;
-                    a.BillDeliveryDate = MarkaPartyInfo[a.Marka].BillDeliveryDate;
-                    a.BillTTDAPDate = MarkaPartyInfo[a.Marka].BillTTDAPDate;
-                    a.BillTTDAPNumber = MarkaPartyInfo[a.Marka].BillTTDAPNumber;
-                });
+            //db.TmpContainerItems
+            //    .Where(c => c.ContainerID == CurrentContainerID)
+            //    .ToList()
+            //    .ForEach(a => {
+            //        a.PartyName = MarkaPartyInfo[a.Marka].PartyName;
+            //        a.JobNumber = MarkaPartyInfo[a.Marka].JobNumber;
+            //        a.LotSize = MarkaPartyInfo[a.Marka].LotSize;
+            //        a.BillOnBoardingDate = MarkaPartyInfo[a.Marka].BillOnBoardingDate;
+            //        a.BillDeliveryDate = MarkaPartyInfo[a.Marka].BillDeliveryDate;
+            //        a.BillTTDAPDate = MarkaPartyInfo[a.Marka].BillTTDAPDate;
+            //        a.BillTTDAPNumber = MarkaPartyInfo[a.Marka].BillTTDAPNumber;
+            //    });
 
-            db.SaveChanges();
+            //db.SaveChanges();
 
+            //var CustomsInfo = db.TmpContainerItems
+            //                    .Where(c => c.ContainerID == CurrentContainerID)
+            //                    .GroupBy(c => new
+            //                    {
+            //                        c.ProductBuyerName
+            //                    })
+            //                    .Select(group =>
+            //                        new {
+            //                            ProductBuyerName = group.Key.ProductBuyerName,
+            //                            ProductCustomsName = group.FirstOrDefault(a => a.ProductCustomsName != "").ProductCustomsName,
+            //                            CustomsProductUnit = group.FirstOrDefault(a => a.CustomsProductUnit != "").CustomsProductUnit,
+            //                            CustomsCurrency = group.FirstOrDefault(a => a.CustomsCurrency != "").CustomsCurrency,
+            //                            CustomsUnitPrice = (decimal?)group.FirstOrDefault(a => a.CustomsUnitPrice != 0).CustomsUnitPrice ?? 0
+            //                    }).ToDictionary(a => a.ProductBuyerName);
 
-            var CustomsInfo = db.TmpContainerItems
-                                .Where(c => c.ContainerID == CurrentContainerID)
-                                .GroupBy(c => new
-                                {
-                                    c.ProductBuyerName
-                                })
-                                .Select(group =>
-                                    new {
-                                        group.Key.ProductBuyerName,
-                                        group.FirstOrDefault(a => a.ProductCustomsName != "").ProductCustomsName,
-                                        group.FirstOrDefault(a => a.CustomsProductUnit != "").CustomsProductUnit,
-                                        group.FirstOrDefault(a => a.CustomsCurrency != "").CustomsCurrency,
-                                        group.FirstOrDefault(a => a.CustomsUnitPrice != 0).CustomsUnitPrice
-                                }).ToDictionary(a => a.ProductBuyerName);
-
-
-            db.TmpContainerItems
-               .Where(c => c.ContainerID == CurrentContainerID)
-               .ToList()
-               .ForEach(a =>
-               {
-                   a.ProductCustomsName = CustomsInfo[a.ProductBuyerName].ProductCustomsName;
-                   a.CustomsProductUnit = CustomsInfo[a.ProductBuyerName].CustomsProductUnit;
-                   a.CustomsCurrency = CustomsInfo[a.ProductBuyerName].CustomsCurrency;
-                   a.CustomsUnitPrice = CustomsInfo[a.ProductBuyerName].CustomsUnitPrice;
-               });
+            //db.TmpContainerItems
+            //   .Where(c => c.ContainerID == CurrentContainerID)
+            //   .ToList()
+            //   .ForEach(a =>
+            //   {
+            //       a.ProductCustomsName = CustomsInfo[a.ProductBuyerName].ProductCustomsName;
+            //       a.CustomsProductUnit = CustomsInfo[a.ProductBuyerName].CustomsProductUnit;
+            //       a.CustomsCurrency = CustomsInfo[a.ProductBuyerName].CustomsCurrency;
+            //       a.CustomsUnitPrice = CustomsInfo[a.ProductBuyerName].CustomsUnitPrice;
+            //   });
 
             db.SaveChanges();
 

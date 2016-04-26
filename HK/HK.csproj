@@ -195,7 +195,6 @@
     <Compile Include="Controllers\FileUploadController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImportersController.cs" />
-    <Compile Include="Controllers\ImportFromExcelController.cs" />
     <Compile Include="Controllers\InvoicesController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\ProductContainerBuyerPricesController.cs" />
@@ -764,8 +763,6 @@
     <Content Include="Scripts\bootstrap-table-1.8.1\src\locale\bootstrap-table-en-US.js.template" />
     <Content Include="Scripts\bootstrap-table-1.8.1\src\locale\README.md" />
     <Content Include="Scripts\bootstrap-table-1.8.1\_config.yml" />
-    <Content Include="Content\ExcelTemplates\import-template.xlsx" />
-    <Content Include="Content\ExcelTemplates\sample-container.xlsx" />
     <None Include="Properties\PublishProfiles\Dhanlaxmi through LAN.pubxml" />
     <None Include="Properties\PublishProfiles\Punit Local.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
@@ -844,6 +841,7 @@
     <Content Include="Views\TmpBuyerBill\Export.cshtml" />
     <Content Include="Views\TmpBuyerBill\SelectParty.cshtml" />
     <Content Include="Views\Shared\Success.cshtml" />
+    <Content Include="Views\Shared\InvalidExcel.cshtml" />
     <None Include="Views\TmpDragDrop\Index.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -930,6 +928,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\ExcelTemplates\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\ExportToExcel\" />
     <Folder Include="Views\TmpDelivery\" />

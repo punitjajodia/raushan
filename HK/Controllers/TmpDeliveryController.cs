@@ -1,6 +1,7 @@
 ﻿using ClosedXML.Excel;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -11,8 +12,10 @@ namespace HK.Controllers
     public class TmpDeliveryController : BaseController
     {
         // GET: TmpDelivery
-        public void Index()
+        public ActionResult Index()
         {
+
+            var container = db.Containers.Find(CurrentContainerID);
             var importer = db.Containers.Where(c => c.ContainerID == CurrentContainerID).First().ImporterName;
 
             var containerItems = db.TmpContainerItems
@@ -49,20 +52,24 @@ namespace HK.Controllers
 
             ws.Columns().AdjustToContents();
 
-            string filename = "Delivery";
-            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            Response.AddHeader("content-disposition", "attachment;filename=\"" + filename + ".xlsx\"");
+            var filename = ConfigurationManager.AppSettings["StorageDrive"] + container.ContainerNumber + "/delivery" + "/delivery-" + container.ContainerNumber + ".xlsx";
+
+            wb.SaveAs(filename);
+
+            return View("Success", (object)filename);
+            //Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            //Response.AddHeader("content-disposition", "attachment;filename=\"" + filename + ".xlsx\"");
 
 
-            // Flush the workbook to the Response.OutputStream
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                wb.SaveAs(memoryStream);
-                memoryStream.WriteTo(Response.OutputStream);
-                memoryStream.Close();
-            }
+            //// Flush the workbook to the Response.OutputStream
+            //using (MemoryStream memoryStream = new MemoryStream())
+            //{
+            //    wb.SaveAs(memoryStream);
+            //    memoryStream.WriteTo(Response.OutputStream);
+            //    memoryStream.Close();
+            //}
 
-            Response.End();
+            //Response.End();
         }
     }
 }

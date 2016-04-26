@@ -362,7 +362,15 @@ namespace HK.Controllers
 
             var filename = ConfigurationManager.AppSettings["StorageDrive"] + container.ContainerNumber + "/dataexcel" + "/dataexcel-" + container.ContainerNumber + ".xlsx";
 
-            wb.SaveAs(filename);
+            try
+            {
+                wb.SaveAs(filename);
+            }
+            catch (IOException e)
+            {
+                return View("InvalidExcel", (object) ("Please close all dataexcel sheets before continuing. " + e.Message));
+            }
+            
 
             return View("Success", (object)filename);
             //string filename = container.ContainerNumber;
